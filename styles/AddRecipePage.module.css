@@ -1,0 +1,29 @@
+.container {
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 48px 16px;
+}
+
+.title {
+  margin-bottom: 32px;
+  font-size: 40px;
+  line-height: 1.2;
+}
+
+@media (min-width: 768px) {
+  .container {
+    padding: 48px 32px;
+  }
+
+  .title {
+    font-size: 48px;
+  }
+}
+
+@media (min-width: 1440px) {
+  .container {
+    padding-right: 108px;
+    padding-left: 108px;
+  }
+}

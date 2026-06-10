@@ -1,0 +1,244 @@
+.recipeContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 48px 0;
+}
+
+.backButton {
+  background-color: #f5f5f5;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 8px 16px;
+  margin-bottom: 16px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s ease;
+  align-self: flex-start;
+}
+
+.backButton:hover {
+  background-color: #e0e0e0;
+  border-color: #ccc;
+}
+
+.title {
+  font-size: 40px;
+  font-weight: 600;
+  margin: 16px 0;
+}
+
+.imgContainer {
+  display: flex;
+  justify-content: center;
+  background-color: #2b2d30;
+}
+
+.image {
+  max-width: 361px;
+  width: 100%;
+  height: 276px;
+  justify-content: center;
+  object-fit: cover;
+  overflow: hidden;
+}
+
+.title {
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.layoutWrapper {
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 24px;
+}
+
+.content {
+  flex-direction: column;
+  gap: 16px;
+  align-items: center;
+}
+
+.sidebar {
+  display: flex;
+
+  flex: 1;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 16px;
+}
+
+.stepsTitle {
+  font-weight: 700;
+  font-size: 18px;
+  margin-bottom: 12px;
+}
+
+.stepText {
+  margin-bottom: 16px;
+  font-size: 16px;
+  line-height: 1.5;
+  color: #2b2d30;
+}
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: center;
+  display: flex;
+  flex: 1;
+}
+
+.infoBox {
+  background-color: #fdf7e3;
+  border-radius: 12px;
+  padding: 20px;
+  font-size: 14px;
+  width: 100%;
+  font-weight: 600;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+}
+
+.informations {
+  font-weight: 700;
+  font-size: 24px;
+  color: black;
+}
+
+.infoTitle {
+  font-weight: 600;
+  font-size: 24px;
+}
+
+.infoBox {
+  flex: 2;
+  background-color: #fff8e8;
+  width: 100%;
+  border-radius: 12px;
+  padding: 20px;
+  font-size: 16px;
+  gap: 15px;
+  line-height: 1.5;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+}
+
+.infoTitle {
+  font-size: 24px;
+}
+
+.informations {
+  color: black;
+}
+
+.infoBox p:last-child {
+  margin-bottom: 0;
+}
+
+@media (min-width: 768px) {
+  .recipeContainer {
+    padding: 0 32px;
+  }
+
+  .topSection {
+    flex-direction: column;
+  }
+
+  .content {
+    flex: 2;
+  }
+
+  .sidebar {
+    flex: 1;
+    max-width: 300px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+    width: 100%;
+    gap: 24px;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .infoBox {
+    min-width: 431px;
+  }
+
+  .image {
+    max-width: 704px;
+    height: 624px;
+  }
+}
+
+@media (min-width: 1440px) {
+  .layoutWrapper {
+    flex-direction: row;
+    gap: 24px;
+  }
+
+  .sidebar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    margin-top: 0 auto;
+    max-height: 302px;
+    width: 393px;
+    flex-shrink: 0;
+  }
+
+  .informations {
+    font-weight: 700;
+    font-size: 24px;
+  }
+
+  .infoBox {
+    background-color: #fdf7e3;
+    font-size: 16px;
+    border-radius: 12px;
+    min-width: 393px;
+    max-height: 222px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+  }
+
+  .infoTitle {
+    font-style: 24px;
+  }
+
+  .span {
+    font-weight: 400;
+  }
+}
+
+.image {
+  width: auto;
+  height: 100%;
+  object-fit: cover;
+}
+
+.largeDeleteBtn {
+  display: flex;
+  gap: 16px;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  padding: 16px;
+  border-radius: 8px;
+  background: #c80000;
+  color: var(--white);
+  transition: all 0.3s ease;
+}
+
+.largeDeleteBtn:hover {
+  background-color: transparent;
+  color: #c80000;
+  border: 2px solid #c80000;
+  transform: scale(1.02);
+}

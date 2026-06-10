@@ -1,0 +1,61 @@
+.deleteBtn {
+  border-radius: 8px;
+  padding: 8px;
+  width: 40px;
+  height: 40px;
+  background-color: #c80000;
+  color: #fff;
+  transition: all 0.3s ease;
+}
+
+.deleteBtn:hover {
+  background-color: transparent;
+  color: #c80000;
+  border: 2px solid #c80000;
+  transform: scale(1.05);
+}
+
+.toastWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.toastButtons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.confirmBtn {
+  padding: 5px 10px;
+  background-color: red;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+.confirmBtn:hover {
+  background-color: #d32f2f;
+  transform: scale(1.05);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.cancelBtn {
+  padding: 5px 10px;
+  background-color: white;
+  color: black;
+  border: 1px solid #ddd;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+.cancelBtn:hover {
+  background-color: #f5f5f5;
+  border-color: #999;
+  transform: scale(1.05);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}

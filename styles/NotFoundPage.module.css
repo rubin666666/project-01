@@ -1,0 +1,26 @@
+.container {
+  display: flex;
+  min-height: 60vh;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 16px;
+  text-align: center;
+}
+
+.subtitle {
+  margin-top: 24px;
+  font-size: 40px;
+}
+
+.description {
+  margin: 16px 0 32px;
+  color: var(--gray);
+}
+
+.button {
+  padding: 14px 24px;
+  border-radius: 8px;
+  color: var(--white);
+  background: var(--light-brown);
+}

@@ -1,0 +1,123 @@
+@import './styles/reset.css';
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
+
+:root {
+  /* font */
+  --main-font-family: 'Montserrat', sans-serif;
+  --font-size-base: 16px;
+
+  --regular-font-weight: 400;
+  --medium-font-weight: 500;
+  --semibold-font-weight: 600;
+  --bold-font-weight: 700;
+
+  /* color */
+  --black: #000000;
+  --white: #ffffff;
+  --dark-brown: #3d2218;
+  --brown: #6d554b;
+  --light-brown: #9b6c43;
+  --gray: #595d62;
+  --light-grey: #9f9f9f;
+  --red: #c80000;
+  --background: #fbfcf8;
+  --light-beige: #faf3e0;
+  --accent-hover: #c58447;
+
+  --background-gradient: linear-gradient(90deg,
+      rgba(0, 0, 0, 0.9) 0%,
+      rgba(0, 0, 0, 0.3) 100%);
+
+  /* responsiveness */
+  --pre-mobile: 392.98px;
+  --mobile: 393px;
+  --pre-tablet: 767.98px;
+  --tablet: 768px;
+  --pre-desktop: 1439.98px;
+  --desktop: 1440px;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  height: 100%;
+  font-family: var(--main-font-family);
+  color: var(--black);
+  font-size: var(--font-size-base);
+  font-style: normal;
+  font-weight: var(--regular-font-weight);
+  line-height: 25px;
+  background-color: var(--background);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.container {
+  max-width: 1440px;
+  padding: 0 16px;
+  margin: 0 auto;
+}
+
+@media screen and (min-width: 768px) {
+  .container {
+    padding: 0 32px;
+  }
+}
+
+@media screen and (min-width: 1440px) {
+  .container {
+    padding: 0 108px;
+  }
+}
+
+.section {
+  padding: 48px 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+button,
+a,
+select,
+input[type='file'] {
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+}
+
+.emptyState,
+.statusPage {
+  width: min(100%, 600px);
+  margin: 48px auto;
+  padding: 40px 24px;
+  border-radius: 16px;
+  background: var(--light-beige);
+  text-align: center;
+}
+
+.emptyState h3,
+.statusPage h1 {
+  margin-bottom: 12px;
+  font-size: 28px;
+}
+
+.emptyState p,
+.statusPage p {
+  margin-bottom: 24px;
+}
+
+.emptyState button,
+.statusPage button {
+  padding: 12px 24px;
+  border: 0;
+  border-radius: 8px;
+  color: var(--white);
+  background: var(--light-brown);
+}

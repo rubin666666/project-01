@@ -1,0 +1,8 @@
+.container {
+  display: flex;
+  min-height: calc(100vh - 168px);
+  align-items: center;
+  justify-content: center;
+  padding: 48px 16px;
+  background: var(--background);
+}
