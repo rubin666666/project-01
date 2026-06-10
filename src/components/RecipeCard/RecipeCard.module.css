@@ -2,13 +2,12 @@
   background-color: #faf3e0;
   border-radius: 16px;
   padding: 12px;
-  width: 100%;
   max-width: 369px;
 }
 
 .image {
-  width: 100%;
-  height: 100%;
+  width: 337px;
+  height: 230px;
   border-radius: 12px;
   object-fit: cover;
 }
@@ -23,9 +22,7 @@
 }
 
 .title {
-  width: auto;
-  min-width: 0;
-  flex: 1;
+  width: 276px;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
@@ -33,12 +30,12 @@
   text-overflow: ellipsis;
   font-weight: 700;
   font-size: 24px;
+  flex-shrink: 0;
   margin-right: 8px;
 }
 
 .timeCont {
   width: 53px;
-  flex-shrink: 0;
   height: 28px;
   display: flex;
   margin-top: 2px;
@@ -96,6 +93,10 @@
     width: 315px;
   }
 
+  .title {
+    width: 254px;
+  }
+
 }
 
 /* ================== DESKTOP ================== */
@@ -108,6 +109,10 @@
   .image {
     width: 264px;
     height: 178px;
+  }
+
+  .title {
+    width: 203px;
   }
 
 }

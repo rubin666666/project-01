@@ -1,26 +1,21 @@
 'use client';
 
 import Loader from './Loader';
-import styles from '@/styles/LoadMoreButton.module.css';
+import buttonStyles from '@/src/components/Button/Button.module.css';
 
-export default function LoadMoreButton({ onClick, loading = false }) {
+export default function LoadMoreButton({
+  onClick,
+  loading = false,
+  className = '',
+}) {
   return (
-    <div className={styles.wrapper}>
-      <button
-        type="button"
-        className={styles.button}
-        onClick={onClick}
-        disabled={loading}
-      >
-        {loading ? (
-          <>
-            <Loader />
-            <span>Loading recipes...</span>
-          </>
-        ) : (
-          'Load more'
-        )}
-      </button>
-    </div>
+    <button
+      type="button"
+      className={`${buttonStyles.baseStyle} ${className}`}
+      onClick={onClick}
+      disabled={loading}
+    >
+      {loading ? <Loader compact /> : 'Load more'}
+    </button>
   );
 }

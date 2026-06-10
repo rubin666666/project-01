@@ -8,6 +8,7 @@ import { GoClock } from 'react-icons/go';
 import toast from 'react-hot-toast';
 import SaveIcon from '@/src/assets/icons/SaveIcon.svg';
 import DeleteIcon from '@/src/assets/icons/DeleteTreshIcon.svg';
+import NoPhoto from '@/src/assets/img/no_photo.jpg';
 import { api, getErrorMessage } from '@/lib/api';
 import { getAllFavoriteRecipes } from '@/lib/queries';
 import { useAuthStore } from '@/store/auth';
@@ -67,15 +68,14 @@ export default function RecipeCard({ recipe, context = 'public' }) {
   return (
     <>
       <article className={styles.item}>
-        <div style={{ position: 'relative', width: '100%', aspectRatio: '4/3' }}>
-          <Image
-            src={recipe.thumb || recipe.photo || '/pg10.png'}
-            alt={recipe.title}
-            fill
-            sizes="(min-width: 1440px) 288px, (min-width: 768px) 45vw, 100vw"
-            className={styles.image}
-          />
-        </div>
+        <Image
+          src={recipe.thumb || recipe.photo || NoPhoto}
+          alt={recipe.title}
+          width={337}
+          height={230}
+          sizes="(min-width: 1440px) 264px, (min-width: 768px) 315px, 337px"
+          className={styles.image}
+        />
         <div className={styles.titleContainer}>
           <h3 className={styles.title}>{recipe.title}</h3>
           <div className={styles.timeCont}>

@@ -2,10 +2,10 @@
 
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { BsXCircle } from 'react-icons/bs';
 import { FiLogOut } from 'react-icons/fi';
-import { RxHamburgerMenu } from 'react-icons/rx';
+import { RxDividerVertical, RxHamburgerMenu } from 'react-icons/rx';
 import clsx from 'clsx';
 import toast from 'react-hot-toast';
 import LogoIcon from '@/src/assets/castom-icons/LogoIcon.svg';
@@ -20,10 +20,25 @@ export default function SiteHeader() {
   const router = useRouter();
   const [menuOpen, setMenuOpen] = useState(false);
   const [logoutOpen, setLogoutOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const { user, isLoggedIn, clearSession } = useAuthStore();
 
   const linkClass = href =>
     clsx(styles.link, pathname === href && styles.active);
+
+  useEffect(() => {
+    const syncViewport = () => setIsMobile(window.innerWidth < 768);
+    const syncScroll = () => setIsScrolled(window.scrollY > 0);
+    syncViewport();
+    syncScroll();
+    window.addEventListener('resize', syncViewport);
+    window.addEventListener('scroll', syncScroll);
+    return () => {
+      window.removeEventListener('resize', syncViewport);
+      window.removeEventListener('scroll', syncScroll);
+    };
+  }, []);
 
   const logout = async () => {
     try {
@@ -41,7 +56,9 @@ export default function SiteHeader() {
 
   return (
     <>
-      <header className={styles.headerNav}>
+      <header
+        className={clsx(styles.headerNav, isScrolled && styles.scrolled)}
+      >
         <div className="container">
           <div className={styles.inner}>
             <Link href="/" className={styles.logoLink}>
@@ -58,34 +75,48 @@ export default function SiteHeader() {
               {menuOpen ? <BsXCircle /> : <RxHamburgerMenu />}
             </button>
             <nav
-              className={clsx(styles.nav, menuOpen && styles.navMobileOpen)}
+              className={clsx(
+                styles.nav,
+                menuOpen && styles.navMobileOpen,
+                menuOpen && isScrolled && styles.scrolled
+              )}
               onClick={() => setMenuOpen(false)}
             >
               <Link href="/" className={linkClass('/')}>
                 Recipes
               </Link>
               {isLoggedIn ? (
-                <>
-                  <Link
-                    href="/profile/own"
-                    className={linkClass('/profile/own')}
-                  >
-                    My Profile
-                  </Link>
-                  <Link
-                    href="/add-recipe"
-                    className={clsx(
-                      styles.linkBtn,
-                      pathname === '/add-recipe' && styles.activeBtn
+                <nav
+                  className={clsx(
+                    userStyles.userMenu,
+                    isMobile && userStyles.mobileMenu
+                  )}
+                >
+                  <div className={userStyles.navLinks}>
+                    <Link
+                      href="/profile/own"
+                      className={clsx(
+                        userStyles.link,
+                        pathname.startsWith('/profile') && userStyles.active
+                      )}
+                    >
+                      My Profile
+                    </Link>
+                    {!isMobile && (
+                      <Link
+                        href="/add-recipe"
+                        className={clsx(userStyles.link, userStyles.addBtn)}
+                      >
+                        Add Recipe
+                      </Link>
                     )}
-                  >
-                    Add Recipe
-                  </Link>
+                  </div>
                   <div className={userStyles.userBlock}>
                     <span className={userStyles.userAvatar}>
                       {user?.name?.charAt(0)?.toUpperCase() || 'U'}
                     </span>
                     <span className={userStyles.userName}>{user?.name}</span>
+                    <RxDividerVertical className={userStyles.divider} />
                     <button
                       type="button"
                       className={userStyles.userLogoutBtn}
@@ -98,7 +129,19 @@ export default function SiteHeader() {
                       <FiLogOut />
                     </button>
                   </div>
-                </>
+                  {isMobile && (
+                    <Link
+                      href="/add-recipe"
+                      className={clsx(
+                        userStyles.link,
+                        userStyles.addBtn,
+                        userStyles.addBtnMobile
+                      )}
+                    >
+                      Add Recipe
+                    </Link>
+                  )}
+                </nav>
               ) : (
                 <>
                   <Link href="/auth/login" className={linkClass('/auth/login')}>

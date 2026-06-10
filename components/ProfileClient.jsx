@@ -9,6 +9,7 @@ import LoadMoreButton from './LoadMoreButton';
 import RecipeCard from './RecipeCard';
 import navStyles from '@/src/components/Profile/ProfileNavigation/ProfileNavigation.module.css';
 import listStyles from '@/src/components/RecipesList/RecipesList.module.css';
+import pageStyles from '@/styles/MainPage.module.css';
 
 export default function ProfileClient({ type }) {
   return (
@@ -84,6 +85,7 @@ function ProfileContent({ type }) {
         </ul>
         {query.hasNextPage && (
           <LoadMoreButton
+            className={pageStyles.loadMoreBtn}
             loading={query.isFetchingNextPage}
             onClick={() => query.fetchNextPage()}
           />

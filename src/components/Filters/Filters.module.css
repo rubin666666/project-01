@@ -125,6 +125,11 @@
     0px 8px 24px -6px rgba(0, 0, 0, 0.08);
 }
 .dropdownItem {
+  display: block;
+  width: 100%;
+  border: 0;
+  background: transparent;
+  text-align: left;
   padding: 8px 12px;
   cursor: pointer;
   font-size: 16px;

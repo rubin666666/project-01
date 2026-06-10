@@ -1,9 +1,11 @@
 import styles from '@/src/components/Loader/Loader.module.css';
 
-export default function Loader({ fullPage = false }) {
+export default function Loader({ fullPage = false, compact = false }) {
   return (
     <div
-      className={`${styles.wrapper} ${fullPage ? styles.fullPage : ''}`}
+      className={`${styles.loader} ${fullPage ? styles.fullPage : ''} ${
+        compact ? styles.compact : ''
+      }`}
       role="status"
       aria-label="Loading"
     >

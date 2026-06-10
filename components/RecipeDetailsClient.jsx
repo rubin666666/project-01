@@ -51,11 +51,12 @@ export default function RecipeDetailsClient({ id }) {
     <div className={styles.recipeContainer}>
       <div className={styles.topSection}>
         <h1 className={styles.title}>{recipe.title}</h1>
-        <div className={styles.imgContainer} style={{ position: 'relative' }}>
+        <div className={styles.imgContainer}>
           <Image
             src={recipe.thumb || recipe.photo || '/pg10.png'}
             alt={recipe.title}
-            fill
+            width={704}
+            height={624}
             priority
             sizes="(min-width: 768px) 60vw, 100vw"
             className={styles.image}

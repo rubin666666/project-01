@@ -8,12 +8,11 @@ import { getCategories, getIngredients, getRecipes } from '@/lib/queries';
 import Loader from './Loader';
 import RecipeCard from './RecipeCard';
 import LoadMoreButton from './LoadMoreButton';
+import FilterControls from './FilterControls';
 import styles from '@/styles/MainPage.module.css';
 import listStyles from '@/src/components/RecipesList/RecipesList.module.css';
-import filterStyles from '@/src/components/Filters/Filters.module.css';
 import searchStyles from '@/src/components/SearchBox/SearchBox.module.css';
 import buttonStyles from '@/src/components/Button/Button.module.css';
-import controlStyles from '@/styles/HomeControls.module.css';
 
 export default function HomeClient() {
   const router = useRouter();
@@ -24,7 +23,6 @@ export default function HomeClient() {
   const ingredient = params.get('ingredient') || '';
   const [query, setQuery] = useState(search);
   const [searchError, setSearchError] = useState('');
-  const [filtersOpen, setFiltersOpen] = useState(false);
   const emptyNotificationKey = useRef('');
 
   const recipeQuery = useInfiniteQuery({
@@ -164,68 +162,21 @@ export default function HomeClient() {
         <h2 className={styles.recipesTitle}>
           {search ? `Search Results for "${search}"` : 'Recipes'}
         </h2>
-        <div className={`${styles.filterContainer} ${controlStyles.header}`}>
-          <span className={filterStyles.recipesCount}>
-            {recipeQuery.isFetching
-              ? 'Searching...'
-              : `${totalItems} ${totalItems === 1 ? 'recipe' : 'recipes'}`}
-          </span>
-          <button
-            type="button"
-            className={controlStyles.toggle}
-            onClick={() => setFiltersOpen(value => !value)}
-          >
-            Filters
-          </button>
-          <div
-            className={`${controlStyles.panel} ${
-              filtersOpen ? controlStyles.open : ''
-            }`}
-          >
-            <button
-              type="button"
-              className={controlStyles.reset}
-              onClick={resetFilters}
-            >
-              Reset filters
-            </button>
-            <select
-              className={controlStyles.select}
-              value={category}
-              onChange={event =>
-                setParams({ category: event.target.value })
-              }
-              disabled={categoriesQuery.isLoading}
-            >
-              <option value="">Category</option>
-              {(categoriesQuery.data || []).map(item => {
-                const name = typeof item === 'string' ? item : item.name;
-                return (
-                  <option key={item._id || name} value={name}>
-                    {name}
-                  </option>
-                );
-              })}
-            </select>
-            <select
-              className={controlStyles.select}
-              value={ingredient}
-              onChange={event =>
-                setParams({ ingredient: event.target.value })
-              }
-              disabled={ingredientsQuery.isLoading}
-            >
-              <option value="">Ingredients</option>
-              {(ingredientsQuery.data || []).map(item => (
-                <option
-                  key={item._id || item}
-                  value={typeof item === 'string' ? item : item._id}
-                >
-                  {typeof item === 'string' ? item : item.name}
-                </option>
-              ))}
-            </select>
-          </div>
+        <div className={styles.filterContainer}>
+          <FilterControls
+            totalItems={totalItems}
+            loading={recipeQuery.isFetching}
+            category={category}
+            ingredient={ingredient}
+            categories={categoriesQuery.data || []}
+            ingredients={ingredientsQuery.data || []}
+            filtersLoading={
+              categoriesQuery.isLoading || ingredientsQuery.isLoading
+            }
+            onCategoryChange={value => setParams({ category: value })}
+            onIngredientChange={value => setParams({ ingredient: value })}
+            onReset={resetFilters}
+          />
         </div>
 
         {recipeQuery.isLoading && <Loader />}
@@ -254,6 +205,7 @@ export default function HomeClient() {
 
         {recipeQuery.hasNextPage && (
           <LoadMoreButton
+            className={styles.loadMoreBtn}
             loading={recipeQuery.isFetchingNextPage}
             onClick={() => recipeQuery.fetchNextPage()}
           />
