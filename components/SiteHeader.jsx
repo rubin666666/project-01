@@ -74,7 +74,10 @@ export default function SiteHeader() {
                   </Link>
                   <Link
                     href="/add-recipe"
-                    className={clsx(styles.linkBtn, styles.activeBtn)}
+                    className={clsx(
+                      styles.linkBtn,
+                      pathname === '/add-recipe' && styles.activeBtn
+                    )}
                   >
                     Add Recipe
                   </Link>

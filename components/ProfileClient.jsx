@@ -1,12 +1,11 @@
 'use client';
 
 import Link from 'next/link';
-import { useQuery } from '@tanstack/react-query';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useInfiniteQuery } from '@tanstack/react-query';
 import { getProfileRecipes } from '@/lib/queries';
 import PrivateGuard from './PrivateGuard';
 import Loader from './Loader';
-import Pagination from './Pagination';
+import LoadMoreButton from './LoadMoreButton';
 import RecipeCard from './RecipeCard';
 import navStyles from '@/src/components/Profile/ProfileNavigation/ProfileNavigation.module.css';
 import listStyles from '@/src/components/RecipesList/RecipesList.module.css';
@@ -20,16 +19,23 @@ export default function ProfileClient({ type }) {
 }
 
 function ProfileContent({ type }) {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const page = Number(searchParams.get('page')) || 1;
-  const query = useQuery({
-    queryKey: ['profile-recipes', type, page],
-    queryFn: () => getProfileRecipes(type, page),
+  const query = useInfiniteQuery({
+    queryKey: ['profile-recipes', type],
+    queryFn: ({ pageParam }) => getProfileRecipes(type, pageParam),
+    initialPageParam: 1,
+    getNextPageParam: (lastPage, pages) => {
+      const loadedItems = pages.reduce(
+        (total, currentPage) => total + (currentPage.data?.length || 0),
+        0
+      );
+      return loadedItems < (lastPage.totalItems || 0)
+        ? pages.length + 1
+        : undefined;
+    },
   });
-  const data = query.data;
-  const recipes = data?.data || [];
-  const totalPages = Math.ceil((data?.totalItems || 0) / 12);
+  const recipes = (query.data?.pages || []).flatMap(
+    currentPage => currentPage.data || []
+  );
 
   return (
     <div className="container">
@@ -76,13 +82,10 @@ function ProfileContent({ type }) {
             </li>
           ))}
         </ul>
-        {totalPages > 1 && (
-          <Pagination
-            totalPages={totalPages}
-            currentPage={page}
-            onPageChange={nextPage =>
-              router.push(`/profile/${type}?page=${nextPage}`)
-            }
+        {query.hasNextPage && (
+          <LoadMoreButton
+            loading={query.isFetchingNextPage}
+            onClick={() => query.fetchNextPage()}
           />
         )}
       </section>

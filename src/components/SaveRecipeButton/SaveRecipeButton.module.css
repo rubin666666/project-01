@@ -39,6 +39,16 @@
   flex-shrink: 0;
 }
 
+.spinner {
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+  border: 3px solid rgba(255, 255, 255, 0.45);
+  border-top-color: currentColor;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
 .saved {
   background-color: #9b6c43;
   color: #fff;
@@ -74,6 +84,12 @@
   background-color: inherit;
   color: inherit;
   border: 1px solid var(--black);
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .loaderContainer {

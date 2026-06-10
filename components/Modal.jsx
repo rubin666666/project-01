@@ -39,6 +39,7 @@ export default function Modal({ open, onOpenChange, title, message, actions }) {
                             : styles.primaryBtn
                         }
                         onClick={action.onClick}
+                        disabled={action.disabled}
                       >
                         {action.text}
                       </button>

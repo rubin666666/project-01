@@ -1,15 +1,15 @@
 'use client';
 
 import Image from 'next/image';
-import Link from 'next/link';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
 import { api, getErrorMessage } from '@/lib/api';
-import { getProfileRecipes, getRecipe } from '@/lib/queries';
+import { getAllFavoriteRecipes, getRecipe } from '@/lib/queries';
 import { useAuthStore } from '@/store/auth';
 import AuthModal from './AuthModal';
 import Loader from './Loader';
+import RecipeNotFound from './RecipeNotFound';
 import styles from '@/src/components/RecipeDetails/RecipeDetails.module.css';
 import saveStyles from '@/src/components/SaveRecipeButton/SaveRecipeButton.module.css';
 import SaveIcon from '@/src/assets/icons/SaveIcon.svg';
@@ -23,11 +23,11 @@ export default function RecipeDetailsClient({ id }) {
     queryFn: () => getRecipe(id),
   });
   const favoritesQuery = useQuery({
-    queryKey: ['profile-recipes', 'favorites', 1],
-    queryFn: () => getProfileRecipes('favorites', 1),
+    queryKey: ['favorite-recipes'],
+    queryFn: getAllFavoriteRecipes,
     enabled: isLoggedIn,
   });
-  const isFavorite = (favoritesQuery.data?.data || []).some(
+  const isFavorite = (favoritesQuery.data || []).some(
     item => item._id === id
   );
   const favoriteMutation = useMutation({
@@ -37,21 +37,14 @@ export default function RecipeDetailsClient({ id }) {
         : api.post(`/api/recipes/${id}/favorite`),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['profile-recipes'] });
+      queryClient.invalidateQueries({ queryKey: ['favorite-recipes'] });
       toast.success(isFavorite ? 'Recipe removed' : 'Recipe saved');
     },
     onError: error => toast.error(getErrorMessage(error)),
   });
 
   if (recipeQuery.isLoading) return <Loader fullPage />;
-  if (recipeQuery.isError) {
-    return (
-      <section className="statusPage">
-        <h1>Recipe not found</h1>
-        <p>The requested recipe is unavailable.</p>
-        <Link href="/">Back to Home</Link>
-      </section>
-    );
-  }
+  if (recipeQuery.isError) return <RecipeNotFound />;
 
   const recipe = recipeQuery.data;
   return (
@@ -105,12 +98,22 @@ export default function RecipeDetailsClient({ id }) {
               isFavorite ? saveStyles.saved : ''
             }`}
             disabled={favoriteMutation.isPending}
+            aria-busy={favoriteMutation.isPending}
             onClick={() =>
               isLoggedIn ? favoriteMutation.mutate() : setAuthOpen(true)
             }
           >
-            <span>{isFavorite ? 'Unsave' : 'Save'}</span>
-            <SaveIcon className={saveStyles.icon} />
+            {favoriteMutation.isPending ? (
+              <>
+                <span className={saveStyles.spinner} aria-hidden="true" />
+                <span>Updating...</span>
+              </>
+            ) : (
+              <>
+                <span>{isFavorite ? 'Unsave' : 'Save'}</span>
+                <SaveIcon className={saveStyles.icon} />
+              </>
+            )}
           </button>
         </aside>
       </div>

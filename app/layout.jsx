@@ -6,7 +6,9 @@ import SiteFooter from '@/components/SiteFooter';
 import styles from '@/src/components/Layout/Layout.module.css';
 
 export const metadata = {
-  metadataBase: new URL('https://tasteorama.vercel.app'),
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
+  ),
   title: {
     default: 'Tasteorama',
     template: '%s | Tasteorama',

@@ -16,7 +16,7 @@ their personal recipe collection.
 
 ## Routes
 
-- `/` - recipe search, filters, cards, and pagination
+- `/` - recipe search, filters, cards, and incremental loading
 - `/recipes/[id]` - recipe details
 - `/auth/login` and `/auth/register` - authentication
 - `/add-recipe` - protected recipe creation page
@@ -34,7 +34,8 @@ their personal recipe collection.
 2. Create `.env.local`:
 
    ```env
-   NEXT_PUBLIC_API_BASE_URL=https://your-api.example.com
+   NEXT_PUBLIC_API_BASE_URL=https://pg10-foodle-server.onrender.com
+   NEXT_PUBLIC_SITE_URL=http://localhost:3000
    ```
 
 3. Start development mode:

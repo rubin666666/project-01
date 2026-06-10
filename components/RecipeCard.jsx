@@ -9,7 +9,7 @@ import toast from 'react-hot-toast';
 import SaveIcon from '@/src/assets/icons/SaveIcon.svg';
 import DeleteIcon from '@/src/assets/icons/DeleteTreshIcon.svg';
 import { api, getErrorMessage } from '@/lib/api';
-import { getProfileRecipes } from '@/lib/queries';
+import { getAllFavoriteRecipes } from '@/lib/queries';
 import { useAuthStore } from '@/store/auth';
 import AuthModal from './AuthModal';
 import Modal from './Modal';
@@ -25,11 +25,11 @@ export default function RecipeCard({ recipe, context = 'public' }) {
   const isLoggedIn = useAuthStore(state => state.isLoggedIn);
 
   const favoritesQuery = useQuery({
-    queryKey: ['profile-recipes', 'favorites', 1],
-    queryFn: () => getProfileRecipes('favorites', 1),
+    queryKey: ['favorite-recipes'],
+    queryFn: getAllFavoriteRecipes,
     enabled: isLoggedIn,
   });
-  const favorites = favoritesQuery.data?.data || [];
+  const favorites = favoritesQuery.data || [];
   const isFavorite = favorites.some(item => item._id === recipe._id);
 
   const favoriteMutation = useMutation({
@@ -39,6 +39,7 @@ export default function RecipeCard({ recipe, context = 'public' }) {
         : api.post(`/api/recipes/${recipe._id}/favorite`),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['profile-recipes'] });
+      queryClient.invalidateQueries({ queryKey: ['favorite-recipes'] });
       toast.success(isFavorite ? 'Recipe removed' : 'Recipe saved');
     },
     onError: error => toast.error(getErrorMessage(error)),
@@ -109,9 +110,14 @@ export default function RecipeCard({ recipe, context = 'public' }) {
               }`}
               onClick={toggleFavorite}
               disabled={favoriteMutation.isPending}
+              aria-busy={favoriteMutation.isPending}
               aria-label={isFavorite ? 'Remove from saved' : 'Save recipe'}
             >
-              <SaveIcon className={saveStyles.icon} />
+              {favoriteMutation.isPending ? (
+                <span className={saveStyles.spinner} aria-hidden="true" />
+              ) : (
+                <SaveIcon className={saveStyles.icon} />
+              )}
             </button>
           )}
         </div>
@@ -123,7 +129,11 @@ export default function RecipeCard({ recipe, context = 'public' }) {
         title="Delete recipe?"
         message="This action cannot be undone."
         actions={[
-          { text: 'Delete', onClick: () => deleteMutation.mutate() },
+          {
+            text: deleteMutation.isPending ? 'Deleting...' : 'Delete',
+            onClick: () => deleteMutation.mutate(),
+            disabled: deleteMutation.isPending,
+          },
           {
             text: 'Cancel',
             type: 'secondary',

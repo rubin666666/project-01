@@ -1,13 +1,13 @@
 'use client';
 
-import { useQuery } from '@tanstack/react-query';
+import { useEffect, useRef, useState } from 'react';
+import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { useState } from 'react';
 import toast from 'react-hot-toast';
 import { getCategories, getIngredients, getRecipes } from '@/lib/queries';
 import Loader from './Loader';
 import RecipeCard from './RecipeCard';
-import Pagination from './Pagination';
+import LoadMoreButton from './LoadMoreButton';
 import styles from '@/styles/MainPage.module.css';
 import listStyles from '@/src/components/RecipesList/RecipesList.module.css';
 import filterStyles from '@/src/components/Filters/Filters.module.css';
@@ -22,14 +22,25 @@ export default function HomeClient() {
   const search = params.get('search') || '';
   const category = params.get('category') || '';
   const ingredient = params.get('ingredient') || '';
-  const page = Number(params.get('page')) || 1;
   const [query, setQuery] = useState(search);
   const [searchError, setSearchError] = useState('');
   const [filtersOpen, setFiltersOpen] = useState(false);
+  const emptyNotificationKey = useRef('');
 
-  const recipeQuery = useQuery({
-    queryKey: ['recipes', { search, category, ingredient, page }],
-    queryFn: () => getRecipes({ search, category, ingredient, page }),
+  const recipeQuery = useInfiniteQuery({
+    queryKey: ['recipes', { search, category, ingredient }],
+    queryFn: ({ pageParam }) =>
+      getRecipes({ search, category, ingredient, page: pageParam }),
+    initialPageParam: 1,
+    getNextPageParam: (lastPage, pages) => {
+      const loadedItems = pages.reduce(
+        (total, currentPage) => total + (currentPage.data?.length || 0),
+        0
+      );
+      return loadedItems < (lastPage.totalItems || 0)
+        ? pages.length + 1
+        : undefined;
+    },
   });
   const categoriesQuery = useQuery({
     queryKey: ['categories'],
@@ -46,7 +57,10 @@ export default function HomeClient() {
       if (value) next.set(key, String(value));
       else next.delete(key);
     });
-    router.push(`${pathname}?${next.toString()}`, { scroll: false });
+    const queryString = next.toString();
+    router.push(queryString ? `${pathname}?${queryString}` : pathname, {
+      scroll: false,
+    });
   };
 
   const submitSearch = event => {
@@ -61,19 +75,48 @@ export default function HomeClient() {
       return;
     }
     setSearchError('');
-    setParams({ search: value, page: '' });
+    setParams({ search: value });
   };
 
   const resetFilters = () => {
-    setQuery('');
-    setSearchError('');
-    router.push(pathname, { scroll: false });
+    setParams({ category: '', ingredient: '' });
   };
 
-  const data = recipeQuery.data;
-  const recipes = data?.data || [];
-  const totalItems = data?.totalItems || 0;
-  const totalPages = Math.ceil(totalItems / 12);
+  const resetSearchAndFilters = () => {
+    setQuery('');
+    setSearchError('');
+    setParams({ search: '', category: '', ingredient: '' });
+  };
+
+  const pages = recipeQuery.data?.pages || [];
+  const recipes = pages.flatMap(currentPage => currentPage.data || []);
+  const totalItems = pages[0]?.totalItems || 0;
+
+  useEffect(() => {
+    setQuery(search);
+  }, [search]);
+
+  useEffect(() => {
+    const notificationKey = `${search}|${category}|${ingredient}`;
+    if (
+      !recipeQuery.isFetching &&
+      !recipeQuery.isError &&
+      recipes.length === 0 &&
+      (search || category || ingredient) &&
+      emptyNotificationKey.current !== notificationKey
+    ) {
+      toast.error('No recipes matched your search');
+      emptyNotificationKey.current = notificationKey;
+    }
+    if (recipes.length > 0) emptyNotificationKey.current = '';
+  }, [
+    category,
+    ingredient,
+    recipeQuery.isError,
+    recipeQuery.isFetching,
+    recipes.length,
+    search,
+  ]);
 
   return (
     <>
@@ -150,7 +193,7 @@ export default function HomeClient() {
               className={controlStyles.select}
               value={category}
               onChange={event =>
-                setParams({ category: event.target.value, page: '' })
+                setParams({ category: event.target.value })
               }
               disabled={categoriesQuery.isLoading}
             >
@@ -168,7 +211,7 @@ export default function HomeClient() {
               className={controlStyles.select}
               value={ingredient}
               onChange={event =>
-                setParams({ ingredient: event.target.value, page: '' })
+                setParams({ ingredient: event.target.value })
               }
               disabled={ingredientsQuery.isLoading}
             >
@@ -195,8 +238,8 @@ export default function HomeClient() {
           <div className="emptyState">
             <h3>No recipes found</h3>
             <p>Try changing your search or filters.</p>
-            <button type="button" onClick={resetFilters}>
-              Reset search
+            <button type="button" onClick={resetSearchAndFilters}>
+              Clear search and filters
             </button>
           </div>
         ) : (
@@ -209,11 +252,10 @@ export default function HomeClient() {
           </ul>
         )}
 
-        {totalPages > 1 && (
-          <Pagination
-            totalPages={totalPages}
-            currentPage={page}
-            onPageChange={nextPage => setParams({ page: nextPage })}
+        {recipeQuery.hasNextPage && (
+          <LoadMoreButton
+            loading={recipeQuery.isFetchingNextPage}
+            onClick={() => recipeQuery.fetchNextPage()}
           />
         )}
       </section>

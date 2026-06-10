@@ -25,7 +25,6 @@ export default function AddRecipeClient() {
 function RecipeForm() {
   const router = useRouter();
   const [preview, setPreview] = useState(null);
-  const [ingredientSearch, setIngredientSearch] = useState('');
   const [ingredientId, setIngredientId] = useState('');
   const [ingredientsList, setIngredientsList] = useState([]);
   const categoriesQuery = useQuery({
@@ -95,10 +94,6 @@ function RecipeForm() {
   };
 
   const ingredients = ingredientsQuery.data || [];
-  const filteredIngredients = ingredients.filter(item =>
-    item.name.toLowerCase().includes(ingredientSearch.toLowerCase())
-  );
-
   return (
     <Formik
       initialValues={initialValues}
@@ -191,21 +186,19 @@ function RecipeForm() {
           <div className={styles.nameAmount}>
             <label className={styles.titleText}>
               Name
-              <input
+              <select
                 className={styles.ingredientName}
-                value={ingredientSearch}
-                onChange={event => {
-                  setIngredientSearch(event.target.value);
-                  setIngredientId('');
-                }}
-                list="ingredient-options"
-                placeholder="Select an ingredient"
-              />
-              <datalist id="ingredient-options">
-                {filteredIngredients.map(item => (
-                  <option key={item._id} value={item.name} />
+                value={ingredientId}
+                onChange={event => setIngredientId(event.target.value)}
+                disabled={ingredientsQuery.isLoading}
+              >
+                <option value="">Select an ingredient</option>
+                {ingredients.map(item => (
+                  <option key={item._id} value={item._id}>
+                    {item.name}
+                  </option>
                 ))}
-              </datalist>
+              </select>
             </label>
             <div className={styles.amountWrapper}>
               <FormField styles={styles} name="measure" label="Amount" />
@@ -214,9 +207,9 @@ function RecipeForm() {
                 type="button"
                 onClick={() => {
                   const selected = ingredients.find(
-                    item => item.name === ingredientSearch
+                    item => item._id === ingredientId
                   );
-                  const selectedId = ingredientId || selected?._id;
+                  const selectedId = selected?._id;
                   if (!selectedId || !values.measure.trim()) {
                     toast.error('Select an ingredient and enter an amount');
                     return;
@@ -229,11 +222,10 @@ function RecipeForm() {
                     ...list,
                     {
                       id: selectedId,
-                      name: selected?.name || ingredientSearch,
+                      name: selected.name,
                       measure: values.measure.trim(),
                     },
                   ]);
-                  setIngredientSearch('');
                   setIngredientId('');
                   setFieldValue('measure', '');
                 }}
