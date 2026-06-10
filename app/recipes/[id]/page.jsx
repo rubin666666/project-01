@@ -1,11 +1,13 @@
 import RecipeDetailsClient from '@/components/RecipeDetailsClient';
-import { getRecipe } from '@/lib/queries';
+import { readDatabase } from '@/lib/server-db';
 import styles from '@/styles/RecipeViewPage.module.css';
 
 export async function generateMetadata({ params }) {
   const { id } = await params;
   try {
-    const recipe = await getRecipe(id);
+    const database = await readDatabase();
+    const recipe = database.recipes.find(item => item._id === id);
+    if (!recipe) throw new Error('Recipe not found');
     const description =
       recipe.description || `Learn how to prepare ${recipe.title}.`;
     const image = recipe.thumb || recipe.photo || '/pg10.png';

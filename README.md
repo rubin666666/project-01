@@ -34,7 +34,6 @@ their personal recipe collection.
 2. Create `.env.local`:
 
    ```env
-   NEXT_PUBLIC_API_BASE_URL=https://pg10-foodle-server.onrender.com
    NEXT_PUBLIC_SITE_URL=http://localhost:3000
    ```
 
@@ -45,6 +44,10 @@ their personal recipe collection.
    ```
 
 4. Open `http://localhost:3000`.
+
+The local API is included in the Next.js application. Runtime data is stored in
+the ignored `.data/db.json` file and initialized from `data/seed.json`, so no
+separate backend process or database is required for local development.
 
 ## Production
 

@@ -1,0 +1,231 @@
+{
+  "users": [],
+  "sessions": [],
+  "favorites": [],
+  "recipes": [
+    {
+      "_id": "recipe-1",
+      "title": "Creamy Garlic Pasta",
+      "description": "A quick creamy pasta with garlic, parmesan, and fresh herbs.",
+      "time": 25,
+      "calories": 520,
+      "category": "Pasta",
+      "instructions": "Boil the pasta. Gently cook the garlic, add cream and parmesan, then toss everything together.",
+      "thumb": "/pg10.png",
+      "ownerId": "seed",
+      "ingredients": [
+        { "id": "ingredient-pasta", "measure": "250 g" },
+        { "id": "ingredient-garlic", "measure": "3 cloves" },
+        { "id": "ingredient-cream", "measure": "200 ml" }
+      ]
+    },
+    {
+      "_id": "recipe-2",
+      "title": "Mediterranean Salad",
+      "description": "Fresh vegetables, feta, olives, and a bright lemon dressing.",
+      "time": 15,
+      "calories": 280,
+      "category": "Salad",
+      "instructions": "Chop the vegetables, add feta and olives, then dress with olive oil and lemon juice.",
+      "thumb": "/pg10.png",
+      "ownerId": "seed",
+      "ingredients": [
+        { "id": "ingredient-tomato", "measure": "3" },
+        { "id": "ingredient-cucumber", "measure": "1" },
+        { "id": "ingredient-feta", "measure": "120 g" }
+      ]
+    },
+    {
+      "_id": "recipe-3",
+      "title": "Chicken Vegetable Soup",
+      "description": "A comforting homemade soup with chicken and seasonal vegetables.",
+      "time": 50,
+      "calories": 340,
+      "category": "Soup",
+      "instructions": "Simmer chicken in stock, add chopped vegetables, and cook until tender.",
+      "thumb": "/pg10.png",
+      "ownerId": "seed",
+      "ingredients": [
+        { "id": "ingredient-chicken", "measure": "400 g" },
+        { "id": "ingredient-carrot", "measure": "2" },
+        { "id": "ingredient-onion", "measure": "1" }
+      ]
+    },
+    {
+      "_id": "recipe-4",
+      "title": "Banana Oat Pancakes",
+      "description": "Soft breakfast pancakes made with ripe banana and rolled oats.",
+      "time": 20,
+      "calories": 390,
+      "category": "Breakfast",
+      "instructions": "Blend all ingredients into a batter and cook small pancakes on a lightly oiled pan.",
+      "thumb": "/pg10.png",
+      "ownerId": "seed",
+      "ingredients": [
+        { "id": "ingredient-banana", "measure": "2" },
+        { "id": "ingredient-oats", "measure": "120 g" },
+        { "id": "ingredient-egg", "measure": "2" }
+      ]
+    },
+    {
+      "_id": "recipe-5",
+      "title": "Roasted Salmon",
+      "description": "Tender oven-roasted salmon with lemon, garlic, and herbs.",
+      "time": 30,
+      "calories": 460,
+      "category": "Seafood",
+      "instructions": "Season the salmon and roast until flaky. Serve with lemon wedges.",
+      "thumb": "/pg10.png",
+      "ownerId": "seed",
+      "ingredients": [
+        { "id": "ingredient-salmon", "measure": "500 g" },
+        { "id": "ingredient-lemon", "measure": "1" },
+        { "id": "ingredient-garlic", "measure": "2 cloves" }
+      ]
+    },
+    {
+      "_id": "recipe-6",
+      "title": "Chocolate Berry Cake",
+      "description": "A rich chocolate cake finished with fresh seasonal berries.",
+      "time": 70,
+      "calories": 610,
+      "category": "Dessert",
+      "instructions": "Mix the batter, bake until set, cool completely, and decorate with berries.",
+      "thumb": "/pg10.png",
+      "ownerId": "seed",
+      "ingredients": [
+        { "id": "ingredient-flour", "measure": "240 g" },
+        { "id": "ingredient-cocoa", "measure": "60 g" },
+        { "id": "ingredient-berries", "measure": "200 g" }
+      ]
+    },
+    {
+      "_id": "recipe-7",
+      "title": "Beef Tacos",
+      "description": "Spiced beef tacos with tomato, lettuce, and a creamy sauce.",
+      "time": 35,
+      "calories": 560,
+      "category": "Meat",
+      "instructions": "Brown the beef with spices, warm the tortillas, and assemble the tacos.",
+      "thumb": "/pg10.png",
+      "ownerId": "seed",
+      "ingredients": [
+        { "id": "ingredient-beef", "measure": "400 g" },
+        { "id": "ingredient-tomato", "measure": "2" },
+        { "id": "ingredient-onion", "measure": "1" }
+      ]
+    },
+    {
+      "_id": "recipe-8",
+      "title": "Mushroom Risotto",
+      "description": "Creamy risotto with sautéed mushrooms and parmesan cheese.",
+      "time": 45,
+      "calories": 490,
+      "category": "Vegetarian",
+      "instructions": "Toast the rice and gradually add hot stock. Fold in mushrooms and parmesan.",
+      "thumb": "/pg10.png",
+      "ownerId": "seed",
+      "ingredients": [
+        { "id": "ingredient-rice", "measure": "250 g" },
+        { "id": "ingredient-mushroom", "measure": "300 g" },
+        { "id": "ingredient-onion", "measure": "1" }
+      ]
+    },
+    {
+      "_id": "recipe-9",
+      "title": "Tomato Bruschetta",
+      "description": "Crisp toasted bread topped with tomatoes, garlic, and basil.",
+      "time": 18,
+      "calories": 240,
+      "category": "Appetizer",
+      "instructions": "Toast sliced bread and top with the seasoned tomato mixture.",
+      "thumb": "/pg10.png",
+      "ownerId": "seed",
+      "ingredients": [
+        { "id": "ingredient-tomato", "measure": "4" },
+        { "id": "ingredient-garlic", "measure": "1 clove" },
+        { "id": "ingredient-bread", "measure": "1 loaf" }
+      ]
+    },
+    {
+      "_id": "recipe-10",
+      "title": "Green Smoothie",
+      "description": "A refreshing smoothie with spinach, banana, and citrus.",
+      "time": 8,
+      "calories": 210,
+      "category": "Drink",
+      "instructions": "Blend all ingredients until completely smooth and serve immediately.",
+      "thumb": "/pg10.png",
+      "ownerId": "seed",
+      "ingredients": [
+        { "id": "ingredient-spinach", "measure": "2 handfuls" },
+        { "id": "ingredient-banana", "measure": "1" },
+        { "id": "ingredient-lemon", "measure": "1/2" }
+      ]
+    },
+    {
+      "_id": "recipe-11",
+      "title": "Baked Chicken and Potatoes",
+      "description": "Juicy baked chicken served with golden herb-roasted potatoes.",
+      "time": 65,
+      "calories": 640,
+      "category": "Meat",
+      "instructions": "Season chicken and potatoes, arrange on a tray, and bake until golden.",
+      "thumb": "/pg10.png",
+      "ownerId": "seed",
+      "ingredients": [
+        { "id": "ingredient-chicken", "measure": "700 g" },
+        { "id": "ingredient-potato", "measure": "600 g" },
+        { "id": "ingredient-garlic", "measure": "4 cloves" }
+      ]
+    },
+    {
+      "_id": "recipe-12",
+      "title": "Vegetable Curry",
+      "description": "A warming vegetable curry in a fragrant coconut sauce.",
+      "time": 40,
+      "calories": 430,
+      "category": "Vegetarian",
+      "instructions": "Cook the vegetables with spices, add coconut milk, and simmer until tender.",
+      "thumb": "/pg10.png",
+      "ownerId": "seed",
+      "ingredients": [
+        { "id": "ingredient-potato", "measure": "300 g" },
+        { "id": "ingredient-carrot", "measure": "2" },
+        { "id": "ingredient-onion", "measure": "1" }
+      ]
+    },
+    {
+      "_id": "recipe-13",
+      "title": "Lemon Cheesecake",
+      "description": "A smooth baked cheesecake with a bright lemon flavor.",
+      "time": 90,
+      "calories": 590,
+      "category": "Dessert",
+      "instructions": "Prepare the crust and filling, bake gently, then chill before serving.",
+      "thumb": "/pg10.png",
+      "ownerId": "seed",
+      "ingredients": [
+        { "id": "ingredient-cream", "measure": "500 g" },
+        { "id": "ingredient-lemon", "measure": "2" },
+        { "id": "ingredient-egg", "measure": "3" }
+      ]
+    },
+    {
+      "_id": "recipe-14",
+      "title": "Egg and Avocado Toast",
+      "description": "Crunchy toast topped with avocado and a soft cooked egg.",
+      "time": 12,
+      "calories": 360,
+      "category": "Breakfast",
+      "instructions": "Toast the bread, mash the avocado, and finish with a cooked egg.",
+      "thumb": "/pg10.png",
+      "ownerId": "seed",
+      "ingredients": [
+        { "id": "ingredient-bread", "measure": "2 slices" },
+        { "id": "ingredient-avocado", "measure": "1" },
+        { "id": "ingredient-egg", "measure": "2" }
+      ]
+    }
+  ]
+}
