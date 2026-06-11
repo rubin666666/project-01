@@ -1,14 +1,12 @@
 'use client';
 
-import Link from 'next/link';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { getProfileRecipes } from '@/lib/queries';
 import PrivateGuard from './private-guard';
 import Loader from './loader';
 import LoadMoreButton from './load-more-button';
-import RecipeCard from './recipe-card';
-import navStyles from '@/src/components/Profile/ProfileNavigation/profilenavigation.module.css';
-import listStyles from '@/src/components/RecipesList/recipeslist.module.css';
+import ProfileNavigation from './profile-navigation';
+import RecipesList from './recipes-list';
 import pageStyles from '@/styles/main-page.module.css';
 
 export default function ProfileClient({ type }) {
@@ -37,36 +35,22 @@ function ProfileContent({ type }) {
   const recipes = (query.data?.pages || []).flatMap(
     currentPage => currentPage.data || []
   );
+  const isInitialLoading = query.isFetching && !query.data;
 
   return (
     <div className="container">
       <section className="section">
-        <div className={navStyles.wrapper}>
-          <h1 className={navStyles.title}>My profile</h1>
-          <nav className={navStyles.tabs}>
-          <Link
-            href="/profile/own"
-            className={`${navStyles.tab} ${
-              type === 'own' ? navStyles.active : ''
-            }`}
-          >
-            My profile
-          </Link>
-          <Link
-            href="/profile/favorites"
-            className={`${navStyles.tab} ${
-              type === 'favorites' ? navStyles.active : ''
-            }`}
-          >
-            Saved recipes
-          </Link>
-          </nav>
-        </div>
-        {query.isLoading && <Loader />}
+        <ProfileNavigation type={type} />
+        {isInitialLoading && <Loader />}
         {query.isError && (
-          <p className={navStyles.message}>Failed to load your recipes.</p>
+          <div className="statusPage" role="alert">
+            <h2>Failed to load your recipes</h2>
+            <button type="button" onClick={() => query.refetch()}>
+              Try again
+            </button>
+          </div>
         )}
-        {!query.isLoading && recipes.length === 0 && (
+        {!isInitialLoading && !query.isError && recipes.length === 0 && (
           <div className="emptyState">
             <h2>No recipes yet</h2>
             <p>
@@ -76,14 +60,10 @@ function ProfileContent({ type }) {
             </p>
           </div>
         )}
-        <ul className={listStyles.list}>
-          {recipes.map(recipe => (
-            <li key={recipe._id} className={listStyles.item}>
-              <RecipeCard recipe={recipe} context={type} />
-            </li>
-          ))}
-        </ul>
-        {query.hasNextPage && (
+        {!isInitialLoading && !query.isError && recipes.length > 0 && (
+          <RecipesList recipes={recipes} context={type} />
+        )}
+        {!isInitialLoading && query.hasNextPage && (
           <LoadMoreButton
             className={pageStyles.loadMoreBtn}
             loading={query.isFetchingNextPage}

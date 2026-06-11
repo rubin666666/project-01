@@ -28,10 +28,12 @@ export default function RecipeCard({ recipe, context = 'public' }) {
   const favoritesQuery = useQuery({
     queryKey: ['favorite-recipes'],
     queryFn: getAllFavoriteRecipes,
-    enabled: isLoggedIn,
+    enabled: isLoggedIn && context === 'public',
   });
   const favorites = favoritesQuery.data || [];
-  const isFavorite = favorites.some(item => item._id === recipe._id);
+  const isFavorite =
+    context === 'favorites' ||
+    favorites.some(item => item._id === recipe._id);
 
   const favoriteMutation = useMutation({
     mutationFn: action =>
@@ -45,7 +47,15 @@ export default function RecipeCard({ recipe, context = 'public' }) {
           ? recipes.filter(item => item._id !== recipe._id)
           : [...recipes, recipe];
       });
-      queryClient.invalidateQueries({ queryKey: ['profile-recipes'] });
+      if (action === 'remove') {
+        queryClient.setQueryData(
+          ['profile-recipes', 'favorites'],
+          current => removeRecipeFromPages(current, recipe._id)
+        );
+        queryClient.invalidateQueries({
+          queryKey: ['profile-recipes', 'favorites'],
+        });
+      }
       queryClient.invalidateQueries({ queryKey: ['favorite-recipes'] });
       toast.success(action === 'remove' ? 'Recipe removed' : 'Recipe saved');
     },
@@ -56,7 +66,12 @@ export default function RecipeCard({ recipe, context = 'public' }) {
     mutationFn: () => api.delete(`/api/recipes/${recipe._id}`),
     onSuccess: () => {
       setDeleteOpen(false);
-      queryClient.invalidateQueries({ queryKey: ['profile-recipes'] });
+      queryClient.setQueryData(['profile-recipes', 'own'], current =>
+        removeRecipeFromPages(current, recipe._id)
+      );
+      queryClient.invalidateQueries({
+        queryKey: ['profile-recipes', 'own'],
+      });
       queryClient.invalidateQueries({ queryKey: ['recipes'] });
       toast.success('Recipe deleted');
     },
@@ -149,4 +164,17 @@ export default function RecipeCard({ recipe, context = 'public' }) {
       />
     </>
   );
+}
+
+function removeRecipeFromPages(current, recipeId) {
+  if (!current?.pages) return current;
+
+  return {
+    ...current,
+    pages: current.pages.map(page => ({
+      ...page,
+      data: (page.data || []).filter(item => item._id !== recipeId),
+      totalItems: Math.max((page.totalItems || 0) - 1, 0),
+    })),
+  };
 }
