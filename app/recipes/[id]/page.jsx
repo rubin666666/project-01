@@ -1,4 +1,5 @@
 import RecipeDetailsClient from '@/components/recipe-details-client';
+import { notFound } from 'next/navigation';
 import { readDatabase } from '@/lib/server-db';
 import styles from '@/styles/recipe-view-page.module.css';
 
@@ -32,6 +33,9 @@ export async function generateMetadata({ params }) {
 
 export default async function RecipePage({ params }) {
   const { id } = await params;
+  const database = await readDatabase();
+  if (!database.recipes.some(recipe => recipe._id === id)) notFound();
+
   return (
     <div className={styles.container}>
       <RecipeDetailsClient id={id} />

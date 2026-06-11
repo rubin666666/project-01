@@ -75,8 +75,15 @@
   margin-bottom: 12px;
 }
 
+.stepsList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-left: 24px;
+  list-style: decimal;
+}
+
 .stepText {
-  margin-bottom: 16px;
   font-size: 16px;
   line-height: 1.5;
   color: #2b2d30;
