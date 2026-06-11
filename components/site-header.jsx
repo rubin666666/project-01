@@ -78,6 +78,7 @@ export default function SiteHeader() {
               {menuOpen ? <BsXCircle /> : <RxHamburgerMenu />}
             </button>
             <nav
+              aria-label="Main navigation"
               className={clsx(
                 styles.nav,
                 menuOpen && styles.navMobileOpen,

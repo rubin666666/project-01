@@ -21,9 +21,12 @@ export default function SiteFooter() {
               <span className={styles.logoText}>Tasteorama</span>
             </Link>
             <p className={styles.footerTextSettings}>
-              &copy; 2025 CookingCompanion. All rights reserved.
+              &copy; {new Date().getFullYear()} Tasteorama. All rights reserved.
             </p>
-            <div className={styles.footerRoutesLink}>
+            <nav
+              className={styles.footerRoutesLink}
+              aria-label="Footer navigation"
+            >
               <Link href="/" className={styles.footerLink}>
                 Recipes
               </Link>
@@ -40,7 +43,7 @@ export default function SiteFooter() {
                   Account
                 </button>
               )}
-            </div>
+            </nav>
           </div>
         </div>
       </footer>

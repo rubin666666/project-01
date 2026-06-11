@@ -11,8 +11,20 @@ export default function AuthModal({ open, onOpenChange }) {
       title="Authorization required"
       message="Log in or register to use this feature."
       actions={[
-        { element: <Link href="/auth/login">Log in</Link> },
-        { element: <Link href="/auth/register">Register</Link> },
+        {
+          element: (
+            <Link href="/auth/login" onClick={() => onOpenChange(false)}>
+              Log in
+            </Link>
+          ),
+        },
+        {
+          element: (
+            <Link href="/auth/register" onClick={() => onOpenChange(false)}>
+              Register
+            </Link>
+          ),
+        },
       ]}
     />
   );
