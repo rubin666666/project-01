@@ -93,6 +93,7 @@ export default function HomeClient() {
   const pages = recipeQuery.data?.pages || [];
   const recipes = pages.flatMap(currentPage => currentPage.data || []);
   const totalItems = pages[0]?.totalItems || 0;
+  const filtersError = categoriesQuery.isError || ingredientsQuery.isError;
 
   useEffect(() => {
     setQuery(search);
@@ -206,6 +207,12 @@ export default function HomeClient() {
             onReset={resetFilters}
           />
         </div>
+        {filtersError && (
+          <div className={styles.error} role="alert">
+            Some filters could not be loaded. Recipe browsing is still
+            available.
+          </div>
+        )}
 
         {recipeQuery.isLoading && <Loader />}
         {recipeQuery.isError && (

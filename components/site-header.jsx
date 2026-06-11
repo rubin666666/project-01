@@ -20,6 +20,7 @@ export default function SiteHeader() {
   const router = useRouter();
   const [menuOpen, setMenuOpen] = useState(false);
   const [logoutOpen, setLogoutOpen] = useState(false);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const { user, isLoggedIn, clearSession } = useAuthStore();
@@ -41,11 +42,13 @@ export default function SiteHeader() {
   }, []);
 
   const logout = async () => {
+    setIsLoggingOut(true);
     try {
       await api.post('/api/auth/logout');
     } catch {
       // The specification requires local logout for every backend response.
     } finally {
+      setIsLoggingOut(false);
       clearSession();
       setLogoutOpen(false);
       router.replace('/');
@@ -162,11 +165,16 @@ export default function SiteHeader() {
         title="Are you sure?"
         message="We will miss you!"
         actions={[
-          { text: 'Log out', onClick: logout },
+          {
+            text: isLoggingOut ? 'Logging out...' : 'Log out',
+            onClick: logout,
+            disabled: isLoggingOut,
+          },
           {
             text: 'Cancel',
             type: 'secondary',
             onClick: () => setLogoutOpen(false),
+            disabled: isLoggingOut,
           },
         ]}
       />

@@ -67,9 +67,14 @@ file adapter in `lib/server-db.js` with a managed database.
 
 ## Quality
 
-- Responsive layouts: mobile, tablet, and desktop
+- Mobile-first responsive layout: fluid from 320px, mobile layout from 393px,
+  tablet from 768px, and desktop from 1440px
+- CSS Modules, modern-normalize, and UI Kit hover states
+- Server Components by default and Client Components only for interactive UI
 - Public and protected routes
-- Page and request loading indicators
+- Formik and Yup forms with validation and request error notifications
+- Page and request loading indicators powered by TanStack Query state
 - Global error and not-found boundaries
 - Internal `/api` backend layer
-- SEO metadata, Open Graph data, and favicon
+- Per-page `generateMetadata`, Open Graph data, and favicon
+- Optimized images through `next/image`

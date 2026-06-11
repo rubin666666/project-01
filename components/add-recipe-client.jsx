@@ -10,6 +10,7 @@ import clsx from 'clsx';
 import { api, getErrorMessage } from '@/lib/api';
 import { getCategories, getIngredients } from '@/lib/queries';
 import { addRecipeSchema } from '@/src/utils/validation-schemas';
+import Loader from './loader';
 import PrivateGuard from './private-guard';
 import styles from '@/src/components/AddRecipeForm/addrecipeform.module.css';
 import ingredientStyles from '@/src/components/RecipeAddIngredient/recipeaddingredient.module.css';
@@ -48,6 +49,28 @@ function RecipeForm() {
     },
     [preview]
   );
+
+  if (categoriesQuery.isLoading || ingredientsQuery.isLoading) {
+    return <Loader />;
+  }
+
+  if (categoriesQuery.isError || ingredientsQuery.isError) {
+    return (
+      <div className="statusPage" role="alert">
+        <h2>Unable to load recipe data</h2>
+        <p>Please retry before filling out the form.</p>
+        <button
+          type="button"
+          onClick={() => {
+            categoriesQuery.refetch();
+            ingredientsQuery.refetch();
+          }}
+        >
+          Try again
+        </button>
+      </div>
+    );
+  }
 
   const initialValues = {
     title: '',
@@ -259,7 +282,7 @@ function RecipeForm() {
                     }
                     aria-label={`Remove ${item.name}`}
                   >
-                    ×
+                    &times;
                   </button>
                 </div>
               ))}

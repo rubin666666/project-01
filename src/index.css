@@ -118,4 +118,10 @@ button:disabled {
   border-radius: 8px;
   color: var(--white);
   background: var(--light-brown);
+  transition: background-color 200ms ease;
+}
+
+.emptyState button:hover,
+.statusPage button:hover {
+  background: var(--accent-hover);
 }

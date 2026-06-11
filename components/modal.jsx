@@ -5,7 +5,7 @@ import * as Dialog from '@radix-ui/react-dialog';
 import CloseIcon from '@/src/assets/icons/close-icon.svg';
 import styles from '@/src/components/modal/modal.module.css';
 
-export default function modal({ open, onOpenChange, title, message, actions }) {
+export default function Modal({ open, onOpenChange, title, message, actions }) {
   return (
     <Dialog.Root open={open} onOpenChange={onOpenChange}>
       <Dialog.Portal>
