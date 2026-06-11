@@ -2,6 +2,7 @@ import { fail, ok } from '@/lib/api-response';
 import {
   CATEGORIES,
   createId,
+  filterRecipes,
   getCurrentUser,
   INGREDIENTS,
   paginate,
@@ -17,30 +18,11 @@ import {
 
 export async function GET(request) {
   const { searchParams } = new URL(request.url);
-  const title = searchParams.get('title')?.trim().toLowerCase();
-  const category = searchParams.get('category');
-  const ingredient = searchParams.get('ingredient');
   const database = await readDatabase();
-  const categoryIndex = Number(category?.replace('category-', ''));
-  const categoryName =
-    category?.startsWith('category-') && CATEGORIES[categoryIndex]
-      ? CATEGORIES[categoryIndex]
-      : category;
-
-  const recipes = database.recipes.filter(recipe => {
-    const matchesTitle = !title || recipe.title.toLowerCase().includes(title);
-    const recipeCategory =
-      typeof recipe.category === 'string'
-        ? recipe.category
-        : recipe.category?.name;
-    const matchesCategory = !categoryName || recipeCategory === categoryName;
-    const matchesIngredient =
-      !ingredient ||
-      recipe.ingredients?.some(item => {
-        const ingredientData = INGREDIENTS.find(entry => entry._id === item.id);
-        return item.id === ingredient || ingredientData?.name === ingredient;
-      });
-    return matchesTitle && matchesCategory && matchesIngredient;
+  const recipes = filterRecipes(database.recipes, {
+    title: searchParams.get('title'),
+    category: searchParams.get('category'),
+    ingredient: searchParams.get('ingredient'),
   });
 
   return ok(

@@ -1,5 +1,10 @@
 import { fail, ok } from '@/lib/api-response';
-import { getCurrentUser, paginate, readDatabase } from '@/lib/server-db';
+import {
+  filterRecipes,
+  getCurrentUser,
+  paginate,
+  readDatabase,
+} from '@/lib/server-db';
 
 export async function GET(request) {
   const database = await readDatabase();
@@ -12,7 +17,13 @@ export async function GET(request) {
       .filter(item => item.userId === user._id)
       .map(item => item.recipeId)
   );
-  const recipes = database.recipes.filter(recipe => favoriteIds.has(recipe._id));
+  const recipes = filterRecipes(
+    database.recipes.filter(recipe => favoriteIds.has(recipe._id)),
+    {
+      category: searchParams.get('category'),
+      ingredient: searchParams.get('ingredient'),
+    }
+  );
   return ok(
     paginate(
       recipes,

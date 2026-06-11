@@ -13,6 +13,7 @@ import { api, getErrorMessage } from '@/lib/api';
 import { getAllFavoriteRecipes } from '@/lib/queries';
 import { useAuthStore } from '@/store/auth';
 import AuthModal from './auth-modal';
+import Loader from './loader';
 import Modal from './modal';
 import styles from '@/src/components/RecipeCard/recipecard.module.css';
 import saveStyles from '@/src/components/SaveRecipeButton/saverecipebutton.module.css';
@@ -48,8 +49,8 @@ export default function RecipeCard({ recipe, context = 'public' }) {
           : [...recipes, recipe];
       });
       if (action === 'remove') {
-        queryClient.setQueryData(
-          ['profile-recipes', 'favorites'],
+        queryClient.setQueriesData(
+          { queryKey: ['profile-recipes', 'favorites'] },
           current => removeRecipeFromPages(current, recipe._id)
         );
         queryClient.invalidateQueries({
@@ -66,8 +67,9 @@ export default function RecipeCard({ recipe, context = 'public' }) {
     mutationFn: () => api.delete(`/api/recipes/${recipe._id}`),
     onSuccess: () => {
       setDeleteOpen(false);
-      queryClient.setQueryData(['profile-recipes', 'own'], current =>
-        removeRecipeFromPages(current, recipe._id)
+      queryClient.setQueriesData(
+        { queryKey: ['profile-recipes', 'own'] },
+        current => removeRecipeFromPages(current, recipe._id)
       );
       queryClient.invalidateQueries({
         queryKey: ['profile-recipes', 'own'],
@@ -151,14 +153,29 @@ export default function RecipeCard({ recipe, context = 'public' }) {
         message="This action cannot be undone."
         actions={[
           {
-            text: deleteMutation.isPending ? 'Deleting...' : 'Delete',
-            onClick: () => deleteMutation.mutate(),
-            disabled: deleteMutation.isPending,
+            text: 'Delete',
+            element: (
+              <button
+                type="button"
+                onClick={() => deleteMutation.mutate()}
+                disabled={deleteMutation.isPending}
+              >
+                {deleteMutation.isPending ? (
+                  <>
+                    <Loader compact />
+                    <span>Deleting...</span>
+                  </>
+                ) : (
+                  'Delete'
+                )}
+              </button>
+            ),
           },
           {
             text: 'Cancel',
             type: 'secondary',
             onClick: () => setDeleteOpen(false),
+            disabled: deleteMutation.isPending,
           },
         ]}
       />
@@ -168,6 +185,11 @@ export default function RecipeCard({ recipe, context = 'public' }) {
 
 function removeRecipeFromPages(current, recipeId) {
   if (!current?.pages) return current;
+
+  const containsRecipe = current.pages.some(page =>
+    (page.data || []).some(item => item._id === recipeId)
+  );
+  if (!containsRecipe) return current;
 
   return {
     ...current,

@@ -1,15 +1,15 @@
 'use client';
 
 import Image from 'next/image';
-import { useEffect, useRef } from 'react';
-import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
+import { useCallback, useEffect, useRef } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import toast from 'react-hot-toast';
 import { getCategories, getIngredients, getRecipes } from '@/lib/queries';
 import Loader from './loader';
+import Pagination from './pagination';
 import RecipesList from './recipes-list';
 import SearchBox from './search-box';
-import LoadMoreButton from './load-more-button';
 import FilterControls from './filter-controls';
 import styles from '@/styles/main-page.module.css';
 import mobileHero from '@/src/assets/img/mob_hero_1x-min.png';
@@ -23,22 +23,12 @@ export default function HomeClient() {
   const search = params.get('search') || '';
   const category = params.get('category') || '';
   const ingredient = params.get('ingredient') || '';
+  const page = Math.max(Number(params.get('page')) || 1, 1);
   const emptyNotificationKey = useRef('');
 
-  const recipeQuery = useInfiniteQuery({
-    queryKey: ['recipes', { search, category, ingredient }],
-    queryFn: ({ pageParam }) =>
-      getRecipes({ search, category, ingredient, page: pageParam }),
-    initialPageParam: 1,
-    getNextPageParam: (lastPage, pages) => {
-      const loadedItems = pages.reduce(
-        (total, currentPage) => total + (currentPage.data?.length || 0),
-        0
-      );
-      return loadedItems < (lastPage.totalItems || 0)
-        ? pages.length + 1
-        : undefined;
-    },
+  const recipeQuery = useQuery({
+    queryKey: ['recipes', { search, category, ingredient, page }],
+    queryFn: () => getRecipes({ search, category, ingredient, page }),
   });
   const categoriesQuery = useQuery({
     queryKey: ['categories'],
@@ -49,32 +39,40 @@ export default function HomeClient() {
     queryFn: getIngredients,
   });
 
-  const setParams = changes => {
-    const next = new URLSearchParams(params.toString());
-    Object.entries(changes).forEach(([key, value]) => {
-      if (value) next.set(key, String(value));
-      else next.delete(key);
-    });
-    const queryString = next.toString();
-    router.push(queryString ? `${pathname}?${queryString}` : pathname, {
-      scroll: false,
-    });
-  };
+  const setParams = useCallback(
+    changes => {
+      const next = new URLSearchParams(params.toString());
+      Object.entries(changes).forEach(([key, value]) => {
+        if (value) next.set(key, String(value));
+        else next.delete(key);
+      });
+      const queryString = next.toString();
+      router.push(queryString ? `${pathname}?${queryString}` : pathname, {
+        scroll: false,
+      });
+    },
+    [params, pathname, router]
+  );
 
   const resetFilters = () => {
-    setParams({ category: '', ingredient: '' });
+    setParams({ category: '', ingredient: '', page: '' });
   };
 
   const resetSearchAndFilters = () => {
-    setParams({ search: '', category: '', ingredient: '' });
+    setParams({ search: '', category: '', ingredient: '', page: '' });
   };
 
-  const pages = recipeQuery.data?.pages || [];
-  const recipes = pages.flatMap(currentPage => currentPage.data || []);
-  const totalItems = pages[0]?.totalItems || 0;
+  const recipes = recipeQuery.data?.data || [];
+  const totalItems = recipeQuery.data?.totalItems || 0;
+  const totalPages = recipeQuery.data?.totalPages || 0;
   const filtersError = categoriesQuery.isError || ingredientsQuery.isError;
-  const isRecipesLoading =
-    recipeQuery.isFetching && !recipeQuery.isFetchingNextPage;
+  const isRecipesLoading = recipeQuery.isFetching;
+
+  useEffect(() => {
+    if (!recipeQuery.isFetching && totalPages > 0 && page > totalPages) {
+      setParams({ page: totalPages === 1 ? '' : totalPages });
+    }
+  }, [page, recipeQuery.isFetching, setParams, totalPages]);
 
   useEffect(() => {
     const notificationKey = `${search}|${category}|${ingredient}`;
@@ -83,6 +81,7 @@ export default function HomeClient() {
       !recipeQuery.isError &&
       recipes.length === 0 &&
       search &&
+      (totalPages === 0 || page <= totalPages) &&
       emptyNotificationKey.current !== notificationKey
     ) {
       toast.error('No recipes matched your search');
@@ -92,10 +91,12 @@ export default function HomeClient() {
   }, [
     category,
     ingredient,
+    page,
     recipeQuery.isError,
     recipeQuery.isFetching,
     recipes.length,
     search,
+    totalPages,
   ]);
 
   return (
@@ -135,7 +136,7 @@ export default function HomeClient() {
             <SearchBox
               search={search}
               loading={isRecipesLoading}
-              onSearch={value => setParams({ search: value })}
+              onSearch={value => setParams({ search: value, page: '' })}
             />
           </div>
         </div>
@@ -156,8 +157,12 @@ export default function HomeClient() {
             filtersLoading={
               categoriesQuery.isLoading || ingredientsQuery.isLoading
             }
-            onCategoryChange={value => setParams({ category: value })}
-            onIngredientChange={value => setParams({ ingredient: value })}
+            onCategoryChange={value =>
+              setParams({ category: value, page: '' })
+            }
+            onIngredientChange={value =>
+              setParams({ ingredient: value, page: '' })
+            }
             onReset={resetFilters}
           />
         </div>
@@ -189,11 +194,13 @@ export default function HomeClient() {
           <RecipesList recipes={recipes} />
         )}
 
-        {!isRecipesLoading && recipeQuery.hasNextPage && (
-          <LoadMoreButton
-            className={styles.loadMoreBtn}
-            loading={recipeQuery.isFetchingNextPage}
-            onClick={() => recipeQuery.fetchNextPage()}
+        {!isRecipesLoading && !recipeQuery.isError && totalPages > 1 && (
+          <Pagination
+            totalPages={totalPages}
+            currentPage={Math.min(page, totalPages)}
+            onPageChange={nextPage =>
+              setParams({ page: nextPage === 1 ? '' : nextPage })
+            }
           />
         )}
       </section>

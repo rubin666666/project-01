@@ -1,7 +1,13 @@
 'use client';
 
-import { useInfiniteQuery } from '@tanstack/react-query';
-import { getProfileRecipes } from '@/lib/queries';
+import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import {
+  getCategories,
+  getIngredients,
+  getProfileRecipes,
+} from '@/lib/queries';
+import FilterControls from './filter-controls';
 import PrivateGuard from './private-guard';
 import Loader from './loader';
 import LoadMoreButton from './load-more-button';
@@ -18,9 +24,16 @@ export default function ProfileClient({ type }) {
 }
 
 function ProfileContent({ type }) {
+  const router = useRouter();
+  const pathname = usePathname();
+  const params = useSearchParams();
+  const category = params.get('category') || '';
+  const ingredient = params.get('ingredient') || '';
+
   const query = useInfiniteQuery({
-    queryKey: ['profile-recipes', type],
-    queryFn: ({ pageParam }) => getProfileRecipes(type, pageParam),
+    queryKey: ['profile-recipes', type, { category, ingredient }],
+    queryFn: ({ pageParam }) =>
+      getProfileRecipes(type, pageParam, 12, { category, ingredient }),
     initialPageParam: 1,
     getNextPageParam: (lastPage, pages) => {
       const loadedItems = pages.reduce(
@@ -32,15 +45,59 @@ function ProfileContent({ type }) {
         : undefined;
     },
   });
+  const categoriesQuery = useQuery({
+    queryKey: ['categories'],
+    queryFn: getCategories,
+  });
+  const ingredientsQuery = useQuery({
+    queryKey: ['ingredients'],
+    queryFn: getIngredients,
+  });
+
+  const setFilters = changes => {
+    const next = new URLSearchParams(params.toString());
+    Object.entries(changes).forEach(([key, value]) => {
+      if (value) next.set(key, value);
+      else next.delete(key);
+    });
+    const queryString = next.toString();
+    router.push(queryString ? `${pathname}?${queryString}` : pathname, {
+      scroll: false,
+    });
+  };
+
   const recipes = (query.data?.pages || []).flatMap(
     currentPage => currentPage.data || []
   );
+  const totalItems = query.data?.pages?.[0]?.totalItems || 0;
   const isInitialLoading = query.isFetching && !query.data;
+  const filtersLoading =
+    categoriesQuery.isLoading || ingredientsQuery.isLoading;
+  const filtersError = categoriesQuery.isError || ingredientsQuery.isError;
 
   return (
     <div className="container">
       <section className="section">
-        <ProfileNavigation type={type} />
+        <ProfileNavigation type={type} queryString={params.toString()} />
+        <div className={pageStyles.filterContainer}>
+          <FilterControls
+            totalItems={totalItems}
+            loading={isInitialLoading}
+            category={category}
+            ingredient={ingredient}
+            categories={(categoriesQuery.data || []).map(item => item.name)}
+            ingredients={ingredientsQuery.data || []}
+            filtersLoading={filtersLoading}
+            onCategoryChange={value => setFilters({ category: value })}
+            onIngredientChange={value => setFilters({ ingredient: value })}
+            onReset={() => setFilters({ category: '', ingredient: '' })}
+          />
+        </div>
+        {filtersError && (
+          <div className="statusPage" role="alert">
+            Some filters could not be loaded.
+          </div>
+        )}
         {isInitialLoading && <Loader />}
         {query.isError && (
           <div className="statusPage" role="alert">

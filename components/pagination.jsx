@@ -1,12 +1,16 @@
 'use client';
 
-import styles from '@/src/components/Pagination/Pagination.module.css';
+import { Fragment } from 'react';
+import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
+import styles from '@/src/components/Pagination/pagination.module.css';
 
 export default function Pagination({
   totalPages,
   currentPage,
   onPageChange,
 }) {
+  if (totalPages <= 1) return null;
+
   const pages = Array.from({ length: totalPages }, (_, index) => index + 1);
   const visible = pages.filter(
     page =>
@@ -24,24 +28,27 @@ export default function Pagination({
         className={styles.arrow}
         aria-label="Previous page"
       >
-        ←
+        <FiChevronLeft aria-hidden="true" />
       </button>
       {visible.map((page, index) => (
-        <span key={page} className={styles.pageItem}>
+        <Fragment key={page}>
           {index > 0 && page - visible[index - 1] > 1 && (
-            <span className={styles.dots}>…</span>
+            <span className={styles.dots}>...</span>
           )}
-          <button
-            type="button"
-            onClick={() => onPageChange(page)}
-            className={
-              `${styles.pageBtn} ${page === currentPage ? styles.active : ''}`
-            }
-            aria-current={page === currentPage ? 'page' : undefined}
-          >
-            {page}
-          </button>
-        </span>
+          <span className={styles.pageItem}>
+            <button
+              type="button"
+              onClick={() => onPageChange(page)}
+              className={`${styles.pageBtn} ${
+                page === currentPage ? styles.active : ''
+              }`}
+              aria-current={page === currentPage ? 'page' : undefined}
+              aria-label={`Page ${page}`}
+            >
+              {page}
+            </button>
+          </span>
+        </Fragment>
       ))}
       <button
         type="button"
@@ -50,7 +57,7 @@ export default function Pagination({
         className={styles.arrow}
         aria-label="Next page"
       >
-        →
+        <FiChevronRight aria-hidden="true" />
       </button>
     </nav>
   );

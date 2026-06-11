@@ -1,7 +1,9 @@
 .pagination {
   display: flex;
+  flex-wrap: wrap;
   gap: 4px;
   justify-content: center;
+  margin-top: 24px;
 }
 
 .pages {
@@ -82,7 +84,7 @@
 
 @media screen and (max-width: 767px) {
   .pagination {
-    gap: 16px;
+    gap: 8px;
   }
 
   .pageItem {
