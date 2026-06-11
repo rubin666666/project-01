@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import Modal from './Modal';
+import Modal from './modal';
 
 export default function AuthModal({ open, onOpenChange }) {
   return (

@@ -8,11 +8,14 @@ their personal recipe collection.
 
 - Next.js 15 App Router
 - React 19
+- Next.js Route Handlers
 - TanStack Query
 - Zustand
 - Formik and Yup
 - Axios
 - CSS Modules
+- `next/image` and `next/font`
+- modern-normalize
 
 ## Routes
 
@@ -31,7 +34,7 @@ their personal recipe collection.
    npm install
    ```
 
-2. Create `.env.local`:
+2. Copy `.env.template` to `.env.local` and initialize the listed values:
 
    ```env
    NEXT_PUBLIC_SITE_URL=http://localhost:3000
@@ -56,3 +59,17 @@ npm run lint
 npm run build
 npm start
 ```
+
+Set `NEXT_PUBLIC_SITE_URL` to the public frontend URL before deployment. The
+frontend and internal API can be deployed together on a Next.js-compatible
+platform. For persistent production accounts and recipes, replace the local
+file adapter in `lib/server-db.js` with a managed database.
+
+## Quality
+
+- Responsive layouts: mobile, tablet, and desktop
+- Public and protected routes
+- Page and request loading indicators
+- Global error and not-found boundaries
+- Internal `/api` backend layer
+- SEO metadata, Open Graph data, and favicon

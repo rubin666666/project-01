@@ -1,9 +1,7 @@
 @import './styles/reset.css';
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
-
 :root {
   /* font */
-  --main-font-family: 'Montserrat', sans-serif;
+  --main-font-family: var(--font-montserrat), 'Montserrat', sans-serif;
   --font-size-base: 16px;
 
   --regular-font-weight: 400;

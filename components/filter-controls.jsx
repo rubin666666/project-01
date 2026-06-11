@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { FiFilter } from 'react-icons/fi';
 import { IoMdCloseCircleOutline } from 'react-icons/io';
-import styles from '@/src/components/Filters/Filters.module.css';
+import styles from '@/src/components/Filters/filters.module.css';
 
 function FilterInput({
   items,

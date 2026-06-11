@@ -1,7 +1,7 @@
 'use client';
 
-import Loader from './Loader';
-import buttonStyles from '@/src/components/Button/Button.module.css';
+import Loader from './loader';
+import buttonStyles from '@/src/components/Button/button.module.css';
 
 export default function LoadMoreButton({
   onClick,

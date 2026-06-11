@@ -1,5 +1,5 @@
-import AddRecipeClient from '@/components/AddRecipeClient';
-import styles from '@/styles/AddRecipePage.module.css';
+import AddRecipeClient from '@/components/add-recipe-client';
+import styles from '@/styles/add-recipe-page.module.css';
 
 export const metadata = {
   title: 'Add recipe',

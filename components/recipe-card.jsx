@@ -6,18 +6,18 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { GoClock } from 'react-icons/go';
 import toast from 'react-hot-toast';
-import SaveIcon from '@/src/assets/icons/SaveIcon.svg';
-import DeleteIcon from '@/src/assets/icons/DeleteTreshIcon.svg';
+import SaveIcon from '@/src/assets/icons/save-icon.svg';
+import DeleteIcon from '@/src/assets/icons/delete-trash-icon.svg';
 import NoPhoto from '@/src/assets/img/no_photo.jpg';
 import { api, getErrorMessage } from '@/lib/api';
 import { getAllFavoriteRecipes } from '@/lib/queries';
 import { useAuthStore } from '@/store/auth';
-import AuthModal from './AuthModal';
-import Modal from './Modal';
+import AuthModal from './auth-modal';
+import Modal from './modal';
 import styles from '@/src/components/RecipeCard/RecipeCard.module.css';
-import saveStyles from '@/src/components/SaveRecipeButton/SaveRecipeButton.module.css';
-import deleteStyles from '@/src/components/DeleteRecipeButton/DeleteRecipeButton.module.css';
-import linkStyles from '@/src/components/RecipeLink/RecipeLink.module.css';
+import saveStyles from '@/src/components/SaveRecipeButton/saverecipebutton.module.css';
+import deleteStyles from '@/src/components/DeleteRecipeButton/deleterecipebutton.module.css';
+import linkStyles from '@/src/components/RecipeLink/recipelink.module.css';
 
 export default function RecipeCard({ recipe, context = 'public' }) {
   const queryClient = useQueryClient();

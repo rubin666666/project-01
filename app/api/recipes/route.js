@@ -2,7 +2,7 @@ import { fail, ok } from '@/lib/api-response';
 import {
   createId,
   getCurrentUser,
-  ingredients,
+  INGREDIENTS,
   paginate,
   readDatabase,
   writeDatabase,
@@ -25,7 +25,7 @@ export async function GET(request) {
     const matchesIngredient =
       !ingredient ||
       recipe.ingredients?.some(item => {
-        const ingredientData = ingredients.find(entry => entry._id === item.id);
+        const ingredientData = INGREDIENTS.find(entry => entry._id === item.id);
         return item.id === ingredient || ingredientData?.name === ingredient;
       });
     return matchesTitle && matchesCategory && matchesIngredient;

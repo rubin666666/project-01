@@ -3,7 +3,7 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuthStore } from '@/store/auth';
-import Loader from './Loader';
+import Loader from './loader';
 
 export default function PrivateGuard({ children }) {
   const router = useRouter();

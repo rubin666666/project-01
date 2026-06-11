@@ -1,4 +1,4 @@
-import ProfileClient from '@/components/ProfileClient';
+import ProfileClient from '@/components/profile-client';
 
 export const metadata = { title: 'Saved recipes' };
 

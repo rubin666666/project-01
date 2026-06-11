@@ -3,12 +3,12 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
-const emptyUser = { name: null, email: null };
+const EMPTY_USER = { name: null, email: null };
 
 export const useAuthStore = create(
   persist(
     set => ({
-      user: emptyUser,
+      user: EMPTY_USER,
       token: null,
       isLoggedIn: false,
       hydrated: false,
@@ -17,7 +17,7 @@ export const useAuthStore = create(
         set({ user, token, isLoggedIn: Boolean(token) }),
       updateUser: user => set({ user }),
       clearSession: () =>
-        set({ user: emptyUser, token: null, isLoggedIn: false }),
+        set({ user: EMPTY_USER, token: null, isLoggedIn: false }),
     }),
     {
       name: 'tasteorama-auth',

@@ -9,10 +9,10 @@ import toast from 'react-hot-toast';
 import clsx from 'clsx';
 import { api, getErrorMessage } from '@/lib/api';
 import { getCategories, getIngredients } from '@/lib/queries';
-import { addRecipeSchema } from '@/src/utils/validationSchemas';
-import PrivateGuard from './PrivateGuard';
-import styles from '@/src/components/AddRecipeForm/AddRecipeForm.module.css';
-import ingredientStyles from '@/src/components/RecipeAddIngredient/RecipeAddIngredient.module.css';
+import { addRecipeSchema } from '@/src/utils/validation-schemas';
+import PrivateGuard from './private-guard';
+import styles from '@/src/components/AddRecipeForm/addrecipeform.module.css';
+import ingredientStyles from '@/src/components/RecipeAddIngredient/recipeaddingredient.module.css';
 
 export default function AddRecipeClient() {
   return (

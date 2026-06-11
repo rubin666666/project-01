@@ -7,12 +7,12 @@ import toast from 'react-hot-toast';
 import { api, getErrorMessage } from '@/lib/api';
 import { getAllFavoriteRecipes, getRecipe } from '@/lib/queries';
 import { useAuthStore } from '@/store/auth';
-import AuthModal from './AuthModal';
-import Loader from './Loader';
-import RecipeNotFound from './RecipeNotFound';
-import styles from '@/src/components/RecipeDetails/RecipeDetails.module.css';
-import saveStyles from '@/src/components/SaveRecipeButton/SaveRecipeButton.module.css';
-import SaveIcon from '@/src/assets/icons/SaveIcon.svg';
+import AuthModal from './auth-modal';
+import Loader from './loader';
+import RecipeNotFound from './recipe-not-found';
+import styles from '@/src/components/RecipeDetails/recipedetails.module.css';
+import saveStyles from '@/src/components/SaveRecipeButton/saverecipebutton.module.css';
+import SaveIcon from '@/src/assets/icons/save-icon.svg';
 
 export default function RecipeDetailsClient({ id }) {
   const queryClient = useQueryClient();

@@ -2,10 +2,10 @@
 
 import Link from 'next/link';
 import { useState } from 'react';
-import LogoIcon from '@/src/assets/castom-icons/LogoIcon.svg';
+import LogoIcon from '@/src/assets/castom-icons/logo-icon.svg';
 import { useAuthStore } from '@/store/auth';
-import AuthModal from './AuthModal';
-import styles from '@/src/components/Footer/Footer.module.css';
+import AuthModal from './auth-modal';
+import styles from '@/src/components/Footer/footer.module.css';
 
 export default function SiteFooter() {
   const [authOpen, setAuthOpen] = useState(false);

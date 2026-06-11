@@ -1,5 +1,5 @@
-import AuthForm from '@/components/AuthForm';
-import styles from '@/styles/AuthPage.module.css';
+import AuthForm from '@/components/auth-form';
+import styles from '@/styles/auth-page.module.css';
 
 export const metadata = { title: 'Register' };
 

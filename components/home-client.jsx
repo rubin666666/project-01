@@ -1,18 +1,22 @@
 'use client';
 
+import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import toast from 'react-hot-toast';
 import { getCategories, getIngredients, getRecipes } from '@/lib/queries';
-import Loader from './Loader';
-import RecipeCard from './RecipeCard';
-import LoadMoreButton from './LoadMoreButton';
-import FilterControls from './FilterControls';
-import styles from '@/styles/MainPage.module.css';
-import listStyles from '@/src/components/RecipesList/RecipesList.module.css';
-import searchStyles from '@/src/components/SearchBox/SearchBox.module.css';
-import buttonStyles from '@/src/components/Button/Button.module.css';
+import Loader from './loader';
+import RecipeCard from './recipe-card';
+import LoadMoreButton from './load-more-button';
+import FilterControls from './filter-controls';
+import styles from '@/styles/main-page.module.css';
+import listStyles from '@/src/components/RecipesList/recipeslist.module.css';
+import searchStyles from '@/src/components/SearchBox/searchbox.module.css';
+import buttonStyles from '@/src/components/Button/button.module.css';
+import mobileHero from '@/src/assets/img/mob_hero_1x-min.png';
+import tabletHero from '@/src/assets/img/tab_hero_1x-min.png';
+import desktopHero from '@/src/assets/img/pc_hero_1x-min.png';
 
 export default function HomeClient() {
   const router = useRouter();
@@ -119,6 +123,30 @@ export default function HomeClient() {
   return (
     <>
       <section className={styles.hero}>
+        <Image
+          src={mobileHero}
+          alt=""
+          fill
+          priority
+          sizes="100vw"
+          className={`${styles.heroImage} ${styles.mobileHero}`}
+        />
+        <Image
+          src={tabletHero}
+          alt=""
+          fill
+          priority
+          sizes="100vw"
+          className={`${styles.heroImage} ${styles.tabletHero}`}
+        />
+        <Image
+          src={desktopHero}
+          alt=""
+          fill
+          priority
+          sizes="100vw"
+          className={`${styles.heroImage} ${styles.desktopHero}`}
+        />
         <div className={styles.container}>
           <div className={styles.heroContent}>
             <h1 className={styles.heroTitle}>

@@ -1,26 +1,28 @@
 .hero {
-  background-image: linear-gradient(
-      90deg,
-      rgba(0, 0, 0, 0.9),
-      rgba(0, 0, 0, 0.3) 100%
-    ),
-    url('../src/assets/img/mob_hero_1x-min.png');
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: center;
+  position: relative;
+  overflow: hidden;
 }
 
-@media screen and (min-resolution: 192dpi),
-  (-webkit-min-device-pixel-ratio: 2),
-  (min-resolution: 2dppx) {
-  .hero {
-    background-image: linear-gradient(
-        90deg,
-        rgba(0, 0, 0, 0.9),
-        rgba(0, 0, 0, 0.3) 100%
-      ),
-      url('../src/assets/img/mob_hero_2x-min.png');
-  }
+.hero::after {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  content: '';
+  background: linear-gradient(
+    90deg,
+    rgba(0, 0, 0, 0.9),
+    rgba(0, 0, 0, 0.3) 100%
+  );
+}
+
+.heroImage {
+  z-index: 0;
+  object-fit: cover;
+}
+
+.tabletHero,
+.desktopHero {
+  display: none;
 }
 
 .container {
@@ -31,6 +33,8 @@
 }
 
 .heroContent {
+  position: relative;
+  z-index: 2;
   padding: 128px 16px 96px;
 }
 
@@ -70,13 +74,12 @@
 }
 
 @media screen and (min-width: 768px) {
-  .hero {
-    background-image: linear-gradient(
-        90deg,
-        rgba(0, 0, 0, 0.9),
-        rgba(0, 0, 0, 0.3) 100%
-      ),
-      url('../src/assets/img/tab_hero_1x-min.png');
+  .mobileHero {
+    display: none;
+  }
+
+  .tabletHero {
+    display: block;
   }
 
   .container {
@@ -109,27 +112,13 @@
   }
 }
 
-@media screen and (min-width: 768px) and (min-resolution: 192dpi),
-  (min-width: 768px) and (-webkit-min-device-pixel-ratio: 2),
-  (min-width: 768px) and (min-resolution: 2dppx) {
-  .hero {
-    background-image: linear-gradient(
-        90deg,
-        rgba(0, 0, 0, 0.9),
-        rgba(0, 0, 0, 0.3) 100%
-      ),
-      url('../src/assets/img/tab_hero_2x-min.png');
-  }
-}
-
 @media screen and (min-width: 1440px) {
-  .hero {
-    background-image: linear-gradient(
-        90deg,
-        rgba(0, 0, 0, 0.9),
-        rgba(0, 0, 0, 0.3) 100%
-      ),
-      url('../src/assets/img/pc_hero_1x-min.png');
+  .tabletHero {
+    display: none;
+  }
+
+  .desktopHero {
+    display: block;
   }
 
   .container {
@@ -167,18 +156,5 @@
   .loadMoreBtn:focus {
     border: 2px solid var(--dark-brown);
     filter: drop-shadow(0px 0px 4px var(--dark-brown));
-  }
-}
-
-@media screen and (min-width: 1440px) and (min-resolution: 192dpi),
-  (min-width: 1440px) and (-webkit-min-device-pixel-ratio: 2),
-  (min-width: 1440px) and (min-resolution: 2dppx) {
-  .hero {
-    background-image: linear-gradient(
-        90deg,
-        rgba(0, 0, 0, 0.9),
-        rgba(0, 0, 0, 0.3) 100%
-      ),
-      url('../src/assets/img/pc_hero_2x-min.png');
   }
 }

@@ -1,6 +1,6 @@
-import RecipeDetailsClient from '@/components/RecipeDetailsClient';
+import RecipeDetailsClient from '@/components/recipe-details-client';
 import { readDatabase } from '@/lib/server-db';
-import styles from '@/styles/RecipeViewPage.module.css';
+import styles from '@/styles/recipe-view-page.module.css';
 
 export async function generateMetadata({ params }) {
   const { id } = await params;

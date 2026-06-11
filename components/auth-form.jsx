@@ -7,11 +7,11 @@ import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { api, getErrorMessage } from '@/lib/api';
 import { useAuthStore } from '@/store/auth';
-import { loginSchema, registerSchema } from '@/src/utils/validationSchemas';
+import { loginSchema, registerSchema } from '@/src/utils/validation-schemas';
 import EyeIcon from '@/src/assets/castom-icons/eye.svg';
 import EyeClosedIcon from '@/src/assets/castom-icons/eye-clossed.svg';
-import loginStyles from '@/src/components/Auth/LoginForm/LoginForm.module.css';
-import registerStyles from '@/src/components/Auth/RegisterForm/RegisterForm.module.css';
+import loginStyles from '@/src/components/Auth/LoginForm/loginform.module.css';
+import registerStyles from '@/src/components/Auth/RegisterForm/registerform.module.css';
 
 export default function AuthForm({ mode }) {
   const isRegister = mode === 'register';

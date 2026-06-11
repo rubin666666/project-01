@@ -3,13 +3,13 @@
 import Link from 'next/link';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { getProfileRecipes } from '@/lib/queries';
-import PrivateGuard from './PrivateGuard';
-import Loader from './Loader';
-import LoadMoreButton from './LoadMoreButton';
-import RecipeCard from './RecipeCard';
-import navStyles from '@/src/components/Profile/ProfileNavigation/ProfileNavigation.module.css';
-import listStyles from '@/src/components/RecipesList/RecipesList.module.css';
-import pageStyles from '@/styles/MainPage.module.css';
+import PrivateGuard from './private-guard';
+import Loader from './loader';
+import LoadMoreButton from './load-more-button';
+import RecipeCard from './recipe-card';
+import navStyles from '@/src/components/Profile/ProfileNavigation/profilenavigation.module.css';
+import listStyles from '@/src/components/RecipesList/recipeslist.module.css';
+import pageStyles from '@/styles/main-page.module.css';
 
 export default function ProfileClient({ type }) {
   return (

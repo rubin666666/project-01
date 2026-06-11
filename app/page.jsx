@@ -1,4 +1,4 @@
-import HomeClient from '@/components/HomeClient';
+import HomeClient from '@/components/home-client';
 
 export const metadata = {
   title: 'Recipes',

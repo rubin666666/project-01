@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import styles from '@/styles/NotFoundPage.module.css';
+import styles from '@/styles/not-found-page.module.css';
 
 export default function RecipeNotFound() {
   return (

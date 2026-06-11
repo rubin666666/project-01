@@ -8,12 +8,12 @@ import { FiLogOut } from 'react-icons/fi';
 import { RxDividerVertical, RxHamburgerMenu } from 'react-icons/rx';
 import clsx from 'clsx';
 import toast from 'react-hot-toast';
-import LogoIcon from '@/src/assets/castom-icons/LogoIcon.svg';
+import LogoIcon from '@/src/assets/castom-icons/logo-icon.svg';
 import { api } from '@/lib/api';
 import { useAuthStore } from '@/store/auth';
-import Modal from './Modal';
-import styles from '@/src/components/Header/Header.module.css';
-import userStyles from '@/src/components/UserMenu/UserMenu.module.css';
+import Modal from './modal';
+import styles from '@/src/components/Header/header.module.css';
+import userStyles from '@/src/components/UserMenu/usermenu.module.css';
 
 export default function SiteHeader() {
   const pathname = usePathname();
@@ -86,7 +86,7 @@ export default function SiteHeader() {
                 Recipes
               </Link>
               {isLoggedIn ? (
-                <nav
+                <div
                   className={clsx(
                     userStyles.userMenu,
                     isMobile && userStyles.mobileMenu
@@ -141,7 +141,7 @@ export default function SiteHeader() {
                       Add Recipe
                     </Link>
                   )}
-                </nav>
+                </div>
               ) : (
                 <>
                   <Link href="/auth/login" className={linkClass('/auth/login')}>

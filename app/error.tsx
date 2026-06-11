@@ -1,6 +1,12 @@
 'use client';
 
-export default function GlobalError({ error, reset }) {
+export default function GlobalError({
+  error,
+  reset,
+}: {
+  error: Error & { digest?: string };
+  reset: () => void;
+}) {
   return (
     <section className="statusPage">
       <h1>Something went wrong</h1>
