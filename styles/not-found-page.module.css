@@ -8,8 +8,15 @@
   padding: 32px;
 }
 
+.image {
+  width: min(100%, 361px);
+  height: auto;
+  margin-bottom: 24px;
+  border-radius: 16px;
+}
+
 .title {
-  font-size: 96px;
+  font-size: clamp(64px, 20vw, 96px);
   font-weight: bold;
   color: #e74c3c;
   margin-bottom: 16px;
@@ -41,4 +48,15 @@
 
 .button:hover {
   background-color: #2980b9;
+}
+
+@media screen and (min-width: 768px) {
+  .container {
+    min-height: 70vh;
+    padding: 48px 32px;
+  }
+
+  .image {
+    width: 420px;
+  }
 }
