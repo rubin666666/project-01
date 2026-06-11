@@ -8,23 +8,38 @@ import {
 
 export async function POST(request) {
   const { name, email, password } = await request.json();
-  if (!name?.trim() || !email?.trim() || !password) {
-    return fail('Name, email and password are required');
+  const normalizedName = String(name || '').trim();
+  const normalizedEmail = String(email || '')
+    .trim()
+    .toLowerCase();
+  if (
+    !normalizedName ||
+    normalizedName.length < 2 ||
+    normalizedName.length > 50
+  ) {
+    return fail('Name must contain 2 to 50 characters');
+  }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(normalizedEmail)) {
+    return fail('Enter a valid email address');
+  }
+  if (typeof password !== 'string' || password.length < 6) {
+    return fail('Password must contain at least 6 characters');
   }
 
   const database = await readDatabase();
-  const normalizedEmail = email.trim().toLowerCase();
   if (database.users.some(user => user.email === normalizedEmail)) {
     return fail('An account with this email already exists', 409);
   }
 
   const user = {
     _id: createId('user'),
-    name: name.trim(),
+    name: normalizedName,
     email: normalizedEmail,
     password,
   };
   database.users.push(user);
+  const accessToken = createId('token');
+  database.sessions.push({ token: accessToken, userId: user._id });
   await writeDatabase(database);
-  return ok(publicUser(user), 201);
+  return ok({ user: publicUser(user), accessToken }, 201);
 }

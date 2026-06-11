@@ -8,6 +8,7 @@ import toast from 'react-hot-toast';
 import { api, getErrorMessage } from '@/lib/api';
 import { useAuthStore } from '@/store/auth';
 import { loginSchema, registerSchema } from '@/src/utils/validation-schemas';
+import Loader from './loader';
 import EyeIcon from '@/src/assets/castom-icons/eye.svg';
 import EyeClosedIcon from '@/src/assets/castom-icons/eye-clossed.svg';
 import loginStyles from '@/src/components/Auth/LoginForm/loginform.module.css';
@@ -32,16 +33,17 @@ export default function AuthForm({ mode }) {
     try {
       let response;
       if (isRegister) {
-        await api.post('/api/auth/register', {
+        response = await api.post('/api/auth/register', {
           name: values.name,
           email: values.email,
           password: values.password,
         });
+      } else {
+        response = await api.post('/api/auth/login', {
+          email: values.email,
+          password: values.password,
+        });
       }
-      response = await api.post('/api/auth/login', {
-        email: values.email,
-        password: values.password,
-      });
       const data = response.data.data;
       setSession({ user: data.user, token: data.accessToken });
       toast.success(isRegister ? 'Registration successful' : 'Login successful');
@@ -133,9 +135,13 @@ export default function AuthForm({ mode }) {
                 <div className={styles.inputWrapper}>
                   <Field
                     id="confirmPassword"
-                    name="confirmPassword"
-                    type={showConfirm ? 'text' : 'password'}
-                    className={styles.input}
+                  name="confirmPassword"
+                  type={showConfirm ? 'text' : 'password'}
+                  className={`${styles.input} ${
+                    touched.confirmPassword && errors.confirmPassword
+                      ? styles.inputError
+                      : ''
+                  }`}
                     placeholder="*********"
                   />
                   <button
@@ -172,11 +178,16 @@ export default function AuthForm({ mode }) {
               className={styles.submitButton}
               disabled={isSubmitting}
             >
-              {isSubmitting
-                ? 'Please wait...'
-                : isRegister
-                  ? 'Create account'
-                  : 'Login'}
+              {isSubmitting ? (
+                <>
+                  <Loader compact />
+                  <span>Please wait...</span>
+                </>
+              ) : isRegister ? (
+                'Register'
+              ) : (
+                'Login'
+              )}
             </button>
           </Form>
         )}

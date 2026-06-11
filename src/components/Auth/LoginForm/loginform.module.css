@@ -139,6 +139,10 @@
 }
 
 .submitButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
   border-radius: 8px;
   padding: 8px 20px;
   width: 298px;
