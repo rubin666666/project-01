@@ -5,6 +5,7 @@ import {
   readDatabase,
   writeDatabase,
 } from '@/lib/server-db';
+import { deleteUploadedImage } from '@/lib/uploads';
 
 export async function GET(_request, { params }) {
   const { id } = await params;
@@ -26,5 +27,6 @@ export async function DELETE(request, { params }) {
   database.recipes = database.recipes.filter(item => item._id !== id);
   database.favorites = database.favorites.filter(item => item.recipeId !== id);
   await writeDatabase(database);
+  await deleteUploadedImage(recipe.thumb);
   return ok({ message: 'Recipe deleted' });
 }

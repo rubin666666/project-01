@@ -218,6 +218,10 @@
   }
 
   .buttonSubmit {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
     font-weight: var(--semibold-font-weight);
     font-size: 16px;
     color: var(--white);
@@ -428,6 +432,10 @@
   }
 
   .buttonSubmit {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
     font-weight: var(--semibold-font-weight);
     font-size: 16px;
     color: var(--white);
@@ -562,6 +570,10 @@
   }
 
   .buttonSubmit {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
     width: 809px;
     margin-top: 72px;
   }

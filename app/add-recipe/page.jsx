@@ -14,6 +14,9 @@ export default function AddRecipePage() {
   return (
     <div className={styles.container}>
       <h1 className={styles.title}>Add Recipe</h1>
+      <p className={styles.description}>
+        Share your favorite dish with the Tasteorama community.
+      </p>
       <AddRecipeClient />
     </div>
   );

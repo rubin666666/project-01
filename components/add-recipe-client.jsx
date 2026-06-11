@@ -28,6 +28,7 @@ function RecipeForm() {
   const [preview, setPreview] = useState(null);
   const [ingredientId, setIngredientId] = useState('');
   const [ingredientsList, setIngredientsList] = useState([]);
+  const [ingredientsError, setIngredientsError] = useState('');
   const categoriesQuery = useQuery({
     queryKey: ['categories'],
     queryFn: getCategories,
@@ -85,10 +86,13 @@ function RecipeForm() {
 
   const submit = async (values, helpers) => {
     if (ingredientsList.length === 0) {
-      toast.error('Add at least one ingredient');
+      const message = 'Add at least one ingredient';
+      setIngredientsError(message);
+      toast.error(message);
       helpers.setSubmitting(false);
       return;
     }
+    setIngredientsError('');
     const formData = new FormData();
     ['title', 'description', 'time', 'category', 'instructions'].forEach(key =>
       formData.append(key, values[key])
@@ -234,13 +238,19 @@ function RecipeForm() {
                   );
                   const selectedId = selected?._id;
                   if (!selectedId || !values.measure.trim()) {
-                    toast.error('Select an ingredient and enter an amount');
+                    const message =
+                      'Select an ingredient and enter an amount';
+                    setIngredientsError(message);
+                    toast.error(message);
                     return;
                   }
                   if (ingredientsList.some(item => item.id === selectedId)) {
-                    toast.error('This ingredient is already added');
+                    const message = 'This ingredient is already added';
+                    setIngredientsError(message);
+                    toast.error(message);
                     return;
                   }
+                  setIngredientsError('');
                   setIngredientsList(list => [
                     ...list,
                     {
@@ -257,6 +267,11 @@ function RecipeForm() {
               </button>
             </div>
           </div>
+          {ingredientsError && (
+            <p className={styles.error} role="alert">
+              {ingredientsError}
+            </p>
+          )}
 
           {ingredientsList.length > 0 && (
             <div className={ingredientStyles.container}>
@@ -276,9 +291,15 @@ function RecipeForm() {
                     type="button"
                     className={ingredientStyles.button}
                     onClick={() =>
-                      setIngredientsList(list =>
-                        list.filter((_, itemIndex) => itemIndex !== index)
-                      )
+                      setIngredientsList(list => {
+                        const nextList = list.filter(
+                          (_, itemIndex) => itemIndex !== index
+                        );
+                        if (nextList.length === 0) {
+                          setIngredientsError('Add at least one ingredient');
+                        }
+                        return nextList;
+                      })
                     }
                     aria-label={`Remove ${item.name}`}
                   >
@@ -304,7 +325,14 @@ function RecipeForm() {
               type="submit"
               disabled={isSubmitting}
             >
-              {isSubmitting ? 'Publishing...' : 'Publish Recipe'}
+              {isSubmitting ? (
+                <>
+                  <Loader compact />
+                  <span>Publishing...</span>
+                </>
+              ) : (
+                'Publish Recipe'
+              )}
             </button>
           </div>
         </Form>
