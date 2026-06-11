@@ -14,7 +14,7 @@ import { getAllFavoriteRecipes } from '@/lib/queries';
 import { useAuthStore } from '@/store/auth';
 import AuthModal from './auth-modal';
 import Modal from './modal';
-import styles from '@/src/components/RecipeCard/RecipeCard.module.css';
+import styles from '@/src/components/RecipeCard/recipecard.module.css';
 import saveStyles from '@/src/components/SaveRecipeButton/saverecipebutton.module.css';
 import deleteStyles from '@/src/components/DeleteRecipeButton/deleterecipebutton.module.css';
 import linkStyles from '@/src/components/RecipeLink/recipelink.module.css';
@@ -34,14 +34,20 @@ export default function RecipeCard({ recipe, context = 'public' }) {
   const isFavorite = favorites.some(item => item._id === recipe._id);
 
   const favoriteMutation = useMutation({
-    mutationFn: () =>
-      isFavorite
+    mutationFn: action =>
+      action === 'remove'
         ? api.delete(`/api/recipes/${recipe._id}/favorite`)
         : api.post(`/api/recipes/${recipe._id}/favorite`),
-    onSuccess: () => {
+    onSuccess: (_, action) => {
+      queryClient.setQueryData(['favorite-recipes'], current => {
+        const recipes = current || [];
+        return action === 'remove'
+          ? recipes.filter(item => item._id !== recipe._id)
+          : [...recipes, recipe];
+      });
       queryClient.invalidateQueries({ queryKey: ['profile-recipes'] });
       queryClient.invalidateQueries({ queryKey: ['favorite-recipes'] });
-      toast.success(isFavorite ? 'Recipe removed' : 'Recipe saved');
+      toast.success(action === 'remove' ? 'Recipe removed' : 'Recipe saved');
     },
     onError: error => toast.error(getErrorMessage(error)),
   });
@@ -62,7 +68,7 @@ export default function RecipeCard({ recipe, context = 'public' }) {
       setAuthOpen(true);
       return;
     }
-    favoriteMutation.mutate();
+    favoriteMutation.mutate(isFavorite ? 'remove' : 'add');
   };
 
   return (
@@ -80,13 +86,13 @@ export default function RecipeCard({ recipe, context = 'public' }) {
           <h3 className={styles.title}>{recipe.title}</h3>
           <div className={styles.timeCont}>
             <GoClock size={15} />
-            <span className={styles.timeTitle}>{recipe.time}</span>
+            <span className={styles.timeTitle}>{recipe.time} min</span>
           </div>
         </div>
         <div className={styles.descriptionContainer}>
           <p className={styles.description}>{recipe.description}</p>
           <p className={styles.calories}>
-            {recipe.calories ? `~${recipe.calories} cals` : '—'}
+            {recipe.calories ? `~${recipe.calories} cals` : '-'}
           </p>
         </div>
         <div className={styles.buttonContainer}>

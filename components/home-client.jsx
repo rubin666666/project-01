@@ -1,19 +1,17 @@
 'use client';
 
 import Image from 'next/image';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import toast from 'react-hot-toast';
 import { getCategories, getIngredients, getRecipes } from '@/lib/queries';
 import Loader from './loader';
-import RecipeCard from './recipe-card';
+import RecipesList from './recipes-list';
+import SearchBox from './search-box';
 import LoadMoreButton from './load-more-button';
 import FilterControls from './filter-controls';
 import styles from '@/styles/main-page.module.css';
-import listStyles from '@/src/components/RecipesList/recipeslist.module.css';
-import searchStyles from '@/src/components/SearchBox/searchbox.module.css';
-import buttonStyles from '@/src/components/Button/button.module.css';
 import mobileHero from '@/src/assets/img/mob_hero_1x-min.png';
 import tabletHero from '@/src/assets/img/tab_hero_1x-min.png';
 import desktopHero from '@/src/assets/img/pc_hero_1x-min.png';
@@ -25,8 +23,6 @@ export default function HomeClient() {
   const search = params.get('search') || '';
   const category = params.get('category') || '';
   const ingredient = params.get('ingredient') || '';
-  const [query, setQuery] = useState(search);
-  const [searchError, setSearchError] = useState('');
   const emptyNotificationKey = useRef('');
 
   const recipeQuery = useInfiniteQuery({
@@ -65,28 +61,11 @@ export default function HomeClient() {
     });
   };
 
-  const submitSearch = event => {
-    event.preventDefault();
-    const value = query.trim();
-    if (value.length < 2) {
-      const message = value
-        ? 'Enter at least 2 characters'
-        : 'Enter a search query';
-      setSearchError(message);
-      toast.error(message);
-      return;
-    }
-    setSearchError('');
-    setParams({ search: value });
-  };
-
   const resetFilters = () => {
     setParams({ category: '', ingredient: '' });
   };
 
   const resetSearchAndFilters = () => {
-    setQuery('');
-    setSearchError('');
     setParams({ search: '', category: '', ingredient: '' });
   };
 
@@ -94,10 +73,8 @@ export default function HomeClient() {
   const recipes = pages.flatMap(currentPage => currentPage.data || []);
   const totalItems = pages[0]?.totalItems || 0;
   const filtersError = categoriesQuery.isError || ingredientsQuery.isError;
-
-  useEffect(() => {
-    setQuery(search);
-  }, [search]);
+  const isRecipesLoading =
+    recipeQuery.isFetching && !recipeQuery.isFetchingNextPage;
 
   useEffect(() => {
     const notificationKey = `${search}|${category}|${ingredient}`;
@@ -105,7 +82,7 @@ export default function HomeClient() {
       !recipeQuery.isFetching &&
       !recipeQuery.isError &&
       recipes.length === 0 &&
-      (search || category || ingredient) &&
+      search &&
       emptyNotificationKey.current !== notificationKey
     ) {
       toast.error('No recipes matched your search');
@@ -155,34 +132,11 @@ export default function HomeClient() {
               <br />
               Share Your Flavors
             </h1>
-            <div className={searchStyles.searchBoxContainer}>
-              <form className={searchStyles.form} onSubmit={submitSearch}>
-                <input
-                  className={`${searchStyles.input} ${
-                    searchError ? searchStyles.inputError : ''
-                  }`}
-                  value={query}
-                  onChange={event => {
-                    setQuery(event.target.value);
-                    setSearchError('');
-                  }}
-                  placeholder="Search recipes"
-                  aria-invalid={Boolean(searchError)}
-                  aria-describedby="search-error"
-                />
-                <button
-                  type="submit"
-                  className={`${buttonStyles.baseStyle} ${searchStyles.searchBtn}`}
-                >
-                  Search
-                </button>
-              </form>
-              {searchError && (
-                <span id="search-error" className={searchStyles.error}>
-                  {searchError}
-                </span>
-              )}
-            </div>
+            <SearchBox
+              search={search}
+              loading={isRecipesLoading}
+              onSearch={value => setParams({ search: value })}
+            />
           </div>
         </div>
       </section>
@@ -194,10 +148,10 @@ export default function HomeClient() {
         <div className={styles.filterContainer}>
           <FilterControls
             totalItems={totalItems}
-            loading={recipeQuery.isFetching}
+            loading={isRecipesLoading}
             category={category}
             ingredient={ingredient}
-            categories={categoriesQuery.data || []}
+            categories={(categoriesQuery.data || []).map(item => item.name)}
             ingredients={ingredientsQuery.data || []}
             filtersLoading={
               categoriesQuery.isLoading || ingredientsQuery.isLoading
@@ -214,13 +168,15 @@ export default function HomeClient() {
           </div>
         )}
 
-        {recipeQuery.isLoading && <Loader />}
+        {isRecipesLoading && <Loader />}
         {recipeQuery.isError && (
-          <div className={styles.error}>
+          <div className={styles.error} role="alert">
             Failed to load recipes. Please try again.
           </div>
         )}
-        {!recipeQuery.isLoading && !recipeQuery.isError && recipes.length === 0 ? (
+        {!isRecipesLoading &&
+        !recipeQuery.isError &&
+        recipes.length === 0 ? (
           <div className="emptyState">
             <h3>No recipes found</h3>
             <p>Try changing your search or filters.</p>
@@ -228,17 +184,12 @@ export default function HomeClient() {
               Clear search and filters
             </button>
           </div>
-        ) : (
-          <ul className={listStyles.list}>
-            {recipes.map(recipe => (
-              <li key={recipe._id} className={listStyles.item}>
-                <RecipeCard recipe={recipe} />
-              </li>
-            ))}
-          </ul>
+        ) : null}
+        {!isRecipesLoading && !recipeQuery.isError && recipes.length > 0 && (
+          <RecipesList recipes={recipes} />
         )}
 
-        {recipeQuery.hasNextPage && (
+        {!isRecipesLoading && recipeQuery.hasNextPage && (
           <LoadMoreButton
             className={styles.loadMoreBtn}
             loading={recipeQuery.isFetchingNextPage}

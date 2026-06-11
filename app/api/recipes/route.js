@@ -1,5 +1,6 @@
 import { fail, ok } from '@/lib/api-response';
 import {
+  CATEGORIES,
   createId,
   getCurrentUser,
   INGREDIENTS,
@@ -14,6 +15,11 @@ export async function GET(request) {
   const category = searchParams.get('category');
   const ingredient = searchParams.get('ingredient');
   const database = await readDatabase();
+  const categoryIndex = Number(category?.replace('category-', ''));
+  const categoryName =
+    category?.startsWith('category-') && CATEGORIES[categoryIndex]
+      ? CATEGORIES[categoryIndex]
+      : category;
 
   const recipes = database.recipes.filter(recipe => {
     const matchesTitle = !title || recipe.title.toLowerCase().includes(title);
@@ -21,7 +27,7 @@ export async function GET(request) {
       typeof recipe.category === 'string'
         ? recipe.category
         : recipe.category?.name;
-    const matchesCategory = !category || recipeCategory === category;
+    const matchesCategory = !categoryName || recipeCategory === categoryName;
     const matchesIngredient =
       !ingredient ||
       recipe.ingredients?.some(item => {
