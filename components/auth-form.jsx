@@ -100,7 +100,7 @@ export default function AuthForm({ mode }) {
             />
             <div className={styles.inputGroup}>
               <label htmlFor={`${mode}-password`} className={styles.label}>
-                Create a strong password
+                {isRegister ? 'Create a strong password' : 'Enter your password'}
               </label>
               <div className={styles.inputWrapper}>
                 <Field
@@ -135,13 +135,13 @@ export default function AuthForm({ mode }) {
                 <div className={styles.inputWrapper}>
                   <Field
                     id="confirmPassword"
-                  name="confirmPassword"
-                  type={showConfirm ? 'text' : 'password'}
-                  className={`${styles.input} ${
-                    touched.confirmPassword && errors.confirmPassword
-                      ? styles.inputError
-                      : ''
-                  }`}
+                    name="confirmPassword"
+                    type={showConfirm ? 'text' : 'password'}
+                    className={`${styles.input} ${
+                      touched.confirmPassword && errors.confirmPassword
+                        ? styles.inputError
+                        : ''
+                    }`}
                     placeholder="*********"
                   />
                   <button
@@ -186,7 +186,7 @@ export default function AuthForm({ mode }) {
               ) : isRegister ? (
                 'Register'
               ) : (
-                'Login'
+                'Log in'
               )}
             </button>
           </Form>

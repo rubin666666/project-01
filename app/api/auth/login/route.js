@@ -8,10 +8,16 @@ import {
 
 export async function POST(request) {
   const { email, password } = await request.json();
+  const normalizedEmail = String(email || '')
+    .trim()
+    .toLowerCase();
+  if (!normalizedEmail || typeof password !== 'string' || !password) {
+    return fail('Email and password are required');
+  }
+
   const database = await readDatabase();
   const user = database.users.find(
-    item =>
-      item.email === email?.trim().toLowerCase() && item.password === password
+    item => item.email === normalizedEmail && item.password === password
   );
 
   if (!user) return fail('Incorrect email or password', 401);
