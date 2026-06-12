@@ -1,8 +1,10 @@
 import { fail, ok } from '@/lib/api-response';
 import {
   createId,
+  hashPassword,
   publicUser,
   readDatabase,
+  verifyPassword,
   writeDatabase,
 } from '@/lib/server-db';
 
@@ -16,11 +18,15 @@ export async function POST(request) {
   }
 
   const database = await readDatabase();
-  const user = database.users.find(
-    item => item.email === normalizedEmail && item.password === password
-  );
+  const user = database.users.find(item => item.email === normalizedEmail);
 
-  if (!user) return fail('Incorrect email or password', 401);
+  if (!user || !(await verifyPassword(password, user.password))) {
+    return fail('Incorrect email or password', 401);
+  }
+
+  if (!user.password.startsWith('scrypt:')) {
+    user.password = await hashPassword(password);
+  }
 
   database.sessions = database.sessions.filter(item => item.userId !== user._id);
   const accessToken = createId('token');

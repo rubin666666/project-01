@@ -13,8 +13,8 @@
 }
 
 .pageItem {
-  width: 33px;
-  height: 32px;
+  width: 40px;
+  height: 40px;
 }
 
 .pageBtn {
@@ -40,8 +40,8 @@
 }
 
 .arrow {
-  width: 33px;
-  height: 32px;
+  width: 40px;
+  height: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -69,8 +69,8 @@
 }
 
 .dots {
-  width: 33px;
-  height: 32px;
+  width: 40px;
+  height: 40px;
   line-height: normal;
   display: flex;
   align-items: center;
@@ -82,44 +82,19 @@
   font-weight: var(--medium-font-weight);
 }
 
-@media screen and (max-width: 767px) {
-  .pagination {
-    gap: 8px;
-  }
-
+@media screen and (min-width: 1440px) {
   .pageItem {
-    width: 28px;
-    height: 28px;
-  }
-
-  .arrow {
-    width: 28px;
-    height: 28px;
-  }
-
-  .dots {
-    width: 28px;
-    height: 28px;
-  }
-}
-
-@media screen and (min-width: 768px) {
-  .pagination {
-    gap: 22px;
-  }
-
-  .pageItem {
-    width: 33px;
+    width: 32px;
     height: 32px;
   }
 
   .arrow {
-    width: 33px;
+    width: 32px;
     height: 32px;
   }
 
   .dots {
-    width: 33px;
+    width: 32px;
     height: 32px;
   }
 }

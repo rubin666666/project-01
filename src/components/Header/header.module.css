@@ -113,13 +113,13 @@
   font-size: 16px;
   color: var(--white);
   text-decoration: none;
-  transition: background-color box-shadow 0.3s ease;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .linkBtn:hover,
 .linkBtn:focus {
   background-color: var(--accent-hover);
-  outline: 2px solid var(--accent-color);
+  outline: 2px solid var(--accent-hover);
   transform: scale(1.05);
 }
 
@@ -184,7 +184,7 @@
     color: var(--light-beige);
     font-size: 14px;
     background-color: var(--accent-hover);
-    outline: 2px solid var(--accent-color);
+    outline: 2px solid var(--accent-hover);
     transform: scale(1.05);
   }
 }

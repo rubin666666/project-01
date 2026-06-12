@@ -1,6 +1,7 @@
 import { fail, ok } from '@/lib/api-response';
 import {
   createId,
+  hashPassword,
   publicUser,
   readDatabase,
   writeDatabase,
@@ -35,7 +36,7 @@ export async function POST(request) {
     _id: createId('user'),
     name: normalizedName,
     email: normalizedEmail,
-    password,
+    password: await hashPassword(password),
   };
   database.users.push(user);
   const accessToken = createId('token');

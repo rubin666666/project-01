@@ -1,4 +1,4 @@
-import styles from '@/src/components/Loader/Loader.module.css';
+import styles from '@/src/components/Loader/loader.module.css';
 
 export default function Loader({ fullPage = false, compact = false }) {
   return (

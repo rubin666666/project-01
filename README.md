@@ -19,7 +19,7 @@ their personal recipe collection.
 
 ## Routes
 
-- `/` - recipe search, filters, cards, and incremental loading
+- `/` - recipe search, filters, cards, and pagination
 - `/recipes/[id]` - recipe details
 - `/auth/login` and `/auth/register` - authentication
 - `/add-recipe` - protected recipe creation page
@@ -51,6 +51,7 @@ their personal recipe collection.
 The local API is included in the Next.js application. Runtime data is stored in
 the ignored `.data/db.json` file and initialized from `data/seed.json`, so no
 separate backend process or database is required for local development.
+Passwords are stored as salted `scrypt` hashes.
 
 ## Production
 
@@ -62,8 +63,9 @@ npm start
 
 Set `NEXT_PUBLIC_SITE_URL` to the public frontend URL before deployment. The
 frontend and internal API can be deployed together on a Next.js-compatible
-platform. For persistent production accounts and recipes, replace the local
-file adapter in `lib/server-db.js` with a managed database.
+platform. The bundled file adapter is intended for local development. A managed
+database and persistent object storage are required for production accounts,
+recipes, and uploaded images.
 
 ## Quality
 

@@ -3,7 +3,7 @@
 import { cloneElement } from 'react';
 import * as Dialog from '@radix-ui/react-dialog';
 import CloseIcon from '@/src/assets/icons/close-icon.svg';
-import styles from '@/src/components/modal/modal.module.css';
+import styles from '@/src/components/Modal/modal.module.css';
 
 export default function Modal({ open, onOpenChange, title, message, actions }) {
   return (
